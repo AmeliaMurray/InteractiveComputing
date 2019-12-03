@@ -1,2 +1,2 @@
 # InteractiveComputing
-Final Project 
+AR Final Project
