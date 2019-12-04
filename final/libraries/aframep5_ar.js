@@ -1,8 +1,7 @@
 /* library: aframep5.js
    author: craig kapp
    v0.1: 11/13/2016
-   v0.2: 11/7/2017
-	 v0.3: 11/5/2019  */
+   v0.2: 11/7/2017  */
 
 function Container3D(opts) {
 	// store desired options
@@ -1707,19 +1706,25 @@ function initializerSettersAndGetters(entity) {
 		return returnChildren;
 	}
 
+	entity.getScreenPosition = function() {
+		var renderer = this.worldRef.scene.renderer;
+		var camera = this.worldRef.scene.camera;
+	  var vector = new THREE.Vector3();
+		var widthHalf = 0.5*renderer.getSize().width;
+		var heightHalf = 0.5*renderer.getSize().height;
 
+		this.tag.object3D.updateMatrixWorld();
+		vector.setFromMatrixPosition(this.tag.object3D.matrixWorld);
+		vector.project(camera);
 
-	// update texture (for canvas textures)
-	entity.updateTexture = function() {
-		try {
-			this.tag.object3DMap.mesh.material.map.needsUpdate = true;
-		}
-		catch (e) {
-			console.log(e)
-		}
+		vector.x = (( vector.x * widthHalf ) + widthHalf) / this.worldRef.canvasFactor;
+		vector.y = (- ( vector.y * heightHalf ) + heightHalf) / this.worldRef.canvasFactor;
+
+		return {
+        	x: vector.x,
+			y: vector.y
+    	};
 	}
-
-
 }
 
 
@@ -1739,266 +1744,175 @@ function removeFromWorld(entity) {
 
 
 
-class World {
+function Marker(id, world) {
+	// store a reference to the world
+	this.worldRef = world;
 
-	constructor(id) {
-		console.log("A-FrameP5 v1.0 (Craig Kapp, 2017-2019)");
+	// create a tag reference for this entity
+	this.tag = document.getElementById(id);
 
-		if (id == undefined) {
-			id = "VRScene";
-		}
-		this.scene = document.getElementById(id);
+	// setup a "children" array
+	this.children = [];
 
-		// reference the three.js scene directly
-		this.threeSceneReference =this.scene.object3D;
+	// child management
+	this.addChild = function(child) {
+		// append to our child array
+		this.children.push(child);
 
-		this.flying = false;
-		this.setFlying = function(v) {
-			this.flying = v;
-			this.camera.setWASD(v);
-		}
-		this.getFlying = function() {
-			return this.flying;
-		}
+		// give this child a reference to the world
+		child.worldRef = this.worldRef;
 
-		this.camera = new Camera();
-		this.scene.appendChild(this.camera.holder);
+		// append to our DOM element
+		this.tag.appendChild(child.tag);
+	}
 
-		this.add = function(entity) {
-			this.scene.appendChild(entity.tag);
-		}
-		this.remove = function(entity) {
-			this.scene.removeChild(entity.tag);
-		}
-
-		// raycaster logic (for mouse events & picking)
-		this.raycaster = new THREE.Raycaster();
-		this.cursorPosition = new THREE.Vector2(0,0);
-		this.intersects = [];
-
-		// control semaphores
-		this.slideMode = { enabled: false };
-
-		// set up internal update loop
-		this.frameCount = 0;
-		var _this = this;
-		var _interval = setInterval(function() {
-
-			_this.frameCount++;
-
-			_this.camera.storePosition( _this.camera.holder.getAttribute('position') )
-			_this.camera.storeRotation( _this.camera.holder.getAttribute('rotation') )
-
-			// slideToObject
-			if (_this.slideMode.enabled)
-			{
-				// nudge the camera in this direction
-				_this.camera.nudgePosition(_this.slideMode.slideXInc, _this.slideMode.slideYInc, _this.slideMode.slideZInc);
-
-				// mark this step
-				_this.slideMode.currentStep++;
-
-				// have we arrived?
-				if (_this.slideMode.currentStep >= _this.slideMode.steps)
-				{
-					_this.slideMode.enabled = false;
-				}
+	this.removeChild = function(child) {
+		// first ensure that the item is actually a child
+		var isChild = false;
+		for (var i = 0; i < this.children.length; i++) {
+			if (this.children[i] == child) {
+				isChild = true;
+				break;
 			}
+		}
 
-		}, 10); // end internal update loop
+		if (isChild) {
+			this.children.splice(i, 1);
+			this.tag.removeChild( child.tag );
+		}
+	}
+
+	this.getChildren = function() {
+		var returnChildren = [];
+		for (var i = 0; i < this.children.length; i++) {
+			returnChildren.push( this.children[i] );
+		}
+
+		return returnChildren;
+	}
+
+	this.isVisible = function() {
+		return this.tag.object3D.visible;
+	}
+
+	this.getScreenPosition = function() {
+		var renderer = this.worldRef.scene.renderer;
+		var camera = this.worldRef.scene.camera;
+	  var vector = new THREE.Vector3();
+		var widthHalf = 0.5*renderer.getSize().width;
+		var heightHalf = 0.5*renderer.getSize().height;
+
+		this.tag.object3D.updateMatrixWorld();
+		vector.setFromMatrixPosition(this.tag.object3D.matrixWorld);
+		vector.project(camera);
+
+		vector.x = (( vector.x * widthHalf ) + widthHalf) / this.worldRef.canvasFactor;
+		vector.y = (- ( vector.y * heightHalf ) + heightHalf) / this.worldRef.canvasFactor;
+
+		return {
+        	x: vector.x,
+			y: vector.y
+    	};
+	}
+}
 
 
-		// global click handler
-		this.lastEventFrame = 0;
-		document.addEventListener('mousedown', function(event) {
-			if (_this.lastEventFrame < _this.frameCount) {
-				_this.lastEventFrame = _this.frameCount;
-				_this.triggerClickFunction();
-			}
-		}); // end internal global click handler
+function World(id) {
+	console.log("A-FrameP5 AR v0.1 (Craig Kapp, 11/16/2017)");
 
-	} // end constructor
+	// create p5 canvas
+	this.canvas = createCanvas(800, 600);
+	this.canvas.style('position', 'absolute');
+	this.canvas.style('top', '0px');
+	this.canvas.style('left', '0px');
+	this.canvas.style('z-index', '101');
+	this.canvasFactor = 1.0;
+	this.canvasWidth = 800;
+	this.canvasHeight = 600;
+	this.canvas.style('margin-left', '0px');
+	this.canvas.style('margin-top', '0px');
+	this.canvasMarginLeft = 0;
+	this.canvasMarginTop = 0;
 
-	castRay() {
-		this.raycaster.setFromCamera( this.cursorPosition, this.camera.holder.object3D.children[1]);
+	this.clearDrawingCanvas = function() {
+		this.canvas.drawingContext.clearRect(0,0,800,600);
+	}
+
+	this.getMarker = function(id) {
+		return new Marker(id, this);
+	}
+
+	// store a-frame ID
+	if (id == undefined) {
+		id = "ARScene";
+	}
+	this.scene = document.getElementById(id);
+
+	// reference the three.js scene directly
+	this.threeSceneReference =this.scene.object3D;
+
+	// raycaster logic (for mouse events & picking)
+	this.raycaster = new THREE.Raycaster();
+	this.cursorPosition = new THREE.Vector2(0,0);
+	this.intersects = [];
+
+	this.castRay = function(evt) {
+		console.log(this.canvasFactor);
+		this.cursorPosition.x = (evt.pageX / window.innerWidth) * 2 - 1;
+		this.cursorPosition.y = -1 * ( (evt.pageY / window.innerHeight) * 2 - 1);
+		console.log(evt);
+		console.log(this.cursorPosition);
+		this.raycaster.setFromCamera( this.cursorPosition, this.scene.camera);
 		this.intersects = this.raycaster.intersectObjects( this.threeSceneReference.children, true );
 		if (this.intersects.length > 0) {
-
-			// ignore cursor clicks
-			if (this.intersects[0].object.parent.el.attributes.cursor != undefined) {
-				// grab the next intersected object
-				if (this.intersects.length > 1) {
-					return this.intersects[1];
-				}
-			}
-			else {
-				return this.intersects[0];
-			}
+			return this.intersects[0];
 		}
 		return false;
 	}
 
-	triggerClickFunction() {
-		var obj = this.castRay();
+	this.triggerClickFunction = function(evt) {
+		var obj = this.castRay(evt);
 		if (obj && obj.object.parent.el.eRef != undefined && obj.object.parent.el.eRef.clickFunction != undefined) {
 			obj.object.parent.el.eRef.clickFunction( obj.object.parent.el.eRef );
 		}
 	}
 
-	getUserPosition() {
-		return { x:this.camera.getX(), y:this.camera.getY(), z:this.camera.getZ()};
-	}
+	// set up internal update loop
+	var _this = this;
+	var _interval = setInterval(function() {
 
-	setUserPosition(x,y,z) {
-		this.camera.setPosition(x,y,z);
-	}
+		// adjust p5 canvas size, if necessary
+		if (_this.canvas != undefined) {
+			var v = document.getElementsByTagName('video');
+			if (v.length > 0) {
+				var nw = parseFloat( v[0].style.width.replace('px','')).toFixed(2);
+				var nh = parseFloat( v[0].style.height.replace('px','')).toFixed(2);
+				var ml = parseFloat( v[0].style['margin-left'].replace('px','')).toFixed(2);
+				var mt = parseFloat( v[0].style['margin-top'].replace('px','')).toFixed(2);
 
-	getUserRotation() {
-		//return { x:this.camera.rotationX*180/Math.PI, y:this.camera.rotationY*180/Math.PI, z:this.camera.rotationZ*180/Math.PI};
-		return { x:this.camera.rotationX, y:this.camera.rotationY, z:this.camera.rotationZ};
-	}
+				if (nw != _this.canvasWidth || nh != _this.canvasHeight || ml != _this.canvasMarginLeft || mt != _this.canvasMarginTop) {
+					_this.canvasWidth = nw;
+					_this.canvasHeight = nh;
+					_this.canvasFactor = (nw/800).toFixed(2);
+					_this.canvasMarginLeft = ml;
+					_this.canvasMarginTop = mt;
+					_this.canvas.style('width', v[0].style.width);
+					_this.canvas.style('height', v[0].style.height);
+					_this.canvas.style('margin-top', v[0].style['margin-top']);
+					_this.canvas.style('margin-left', v[0].style['margin-left']);
 
-	moveUserForward(d) {
-		var vectorHUD = new THREE.Vector3();
-		vectorHUD.setFromMatrixPosition(this.camera.cursor.tag.object3D.matrixWorld);
-
-		var vectorCamera = this.getUserPosition();
-
-		var xDiff = vectorHUD.x - vectorCamera.x;
-		var yDiff = vectorHUD.y - vectorCamera.y;
-		var zDiff = vectorHUD.z - vectorCamera.z;
-
-		if (this.flying) {
-			this.camera.nudgePosition(xDiff*d, yDiff*d, zDiff*d);
+				}
+			}
 		}
-		else {
-			this.camera.nudgePosition(xDiff*d, 0, zDiff*d);
-		}
-	}
 
-	teleportToObject(element) {
-		this.camera.setPosition(element.getX(), element.getY(), element.getZ());
-	}
+	}, 10); // end internal update loop
 
 
-
-
-
-	slideToObject(element, time) {
-
-		// only slide if we aren't already sliding
-		if (this.slideMode.enabled == false)
-		{
-			// compute distance in all axes
-			this.slideMode.xDistance = element.getX() - this.camera.getX();
-			this.slideMode.yDistance = element.getY() - this.camera.getY();
-			this.slideMode.zDistance = element.getZ() - this.camera.getZ();
-
-			// compute necessary # of steps
-			this.slideMode.steps = parseInt( time / 10 );
-			this.slideMode.currentStep = 0;
-
-			// compute increments
-			this.slideMode.slideXInc = this.slideMode.xDistance / this.slideMode.steps;
-			this.slideMode.slideYInc = this.slideMode.yDistance / this.slideMode.steps;
-			this.slideMode.slideZInc = this.slideMode.zDistance / this.slideMode.steps;
-
-			// enter into slide mode
-			this.slideMode.enabled = true;
-		}
-	}
-}
-
-
-
-function Camera() {
-
-	// construct an entity holder
-	this.holder = document.createElement('a-entity');
-	this.holder.setAttribute('camera', '');
-
-	// set position of camera
-	this.x = 0;
-	this.y = 1;
-	this.z = 5;
-	this.holder.setAttribute('position', this.x + ' ' + this.y + ' ' + this.z);
-
-	// set rotation of camera
-	this.rotationX = 0;
-	this.rotationY = 0;
-	this.rotationZ = 0;
-
-	// set controls on camera
-	this.holder.setAttribute('look-controls', '');
-	this.setWASD = function(flying) {
-		this.holder.setAttribute('wasd-controls', 'fly: ' + flying);
-	}
-	this.setWASD(false);
-
-	// construct our cursor graphic
-	this.cursor = new Ring({x:0, y:0, z:-1.0, radiusInner: 0.02, radiusOuter: 0.03, side: 'double', red:0, green:0, blue:0, shader:'flat', opacity: 0.5});
-	this.cursor.tag.setAttribute('cursor', 'fuse: false');
-
-	// add camera to our entity holder
-	this.holder.appendChild(this.cursor.tag);
-
-	// setters & getters
-	this.setPosition = function(x, y, z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.holder.setAttribute('position', this.x + ' ' + this.y + ' ' + this.z);
-	}
-
-	this.storePosition = function(v) {
-		this.x = v.x;
-		this.y = v.y;
-		this.z = v.z;
-	}
-
-	this.storeRotation = function(v) {
-		this.rotationX = v.x;
-		this.rotationY = v.y;
-		this.rotationZ = v.z;
-	}
-
-	this.nudgePosition = function(x, y, z) {
-		this.x = this.x + x;
-		this.y = this.y + y;
-		this.z = this.z + z;
-		this.holder.setAttribute('position', this.x + ' ' + this.y + ' ' + this.z);
-	}
-
-	this.getX = function() {
-		return this.x;
-	}
-
-	this.getY = function() {
-		return this.y;
-	}
-
-	this.getZ = function() {
-		return this.z;
-	}
-
-	/*
-	this.rotateX = function(v) {
-		console.log("rotX")
-		this.storeRotation({x:this.rotationX+v, y:this.rotationY, z:this.rotationZ})
-		this.holder.setAttribute('rotation', this.rotationX + ' ' + this.rotationY + ' ' + this.rotationZ);
-		this.holder.object3D.rotateX( radians(v) );
-	}
-	this.rotateY = function(v) {
-		console.log("rotY")
-		this.storeRotation({x:this.rotationX, y:this.rotationY+v, z:this.rotationZ})
-		this.holder.setAttribute('rotation', this.rotationX + ' ' + this.rotationY + ' ' + this.rotationZ);
-		this.holder.object3D.rotateY( radians(v) );
-	}
-	this.rotateZ = function(v) {
-		console.log("rotZ")
-		this.storeRotation({x:this.rotationX, y:this.rotationY, z:this.rotationZ+v})
-		this.holder.setAttribute('rotation', this.rotationX + ' ' + this.rotationY + ' ' + this.rotationZ);
-		this.holder.object3D.rotateZ( radians(v) );
-	}
-	*/
+	// global click handler
+	document.addEventListener('mousedown', function(evt) {
+		_this.triggerClickFunction(evt);
+	}); // end internal global click handler
+	document.addEventListener('touchstart', function(evt) {
+		_this.triggerClickFunction(evt);
+	}); // end internal global click handler
 }

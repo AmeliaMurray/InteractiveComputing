@@ -2,17 +2,17 @@
 <html lang="en-us">
 	<head>
 		<!-- A-Frame VR Library -->
-		<script src="../libraries/aframe.min.js"></script>
+		<script src="./libraries/aframe.min.js"></script>
 
 		<!-- ARToolKit for A-Frame VR Library -->
-		<script src='../libraries/aframe-ar.js'></script>
+		<script src='./libraries/aframe-ar.js'></script>
 
 		<!-- P5 libraries -->
-		<script language="javascript" type="text/javascript" src="../libraries/p5.js"></script>
-		<script language="javascript" type="text/javascript" src="../libraries/p5.dom.min.js"></script>
+		<script language="javascript" type="text/javascript" src="./libraries/p5.js"></script>
+		<script language="javascript" type="text/javascript" src="./libraries/p5.dom.min.js"></script>
 
 		<!-- Craig's AFrameP5 AR library -->
-		<script language="javascript" type="text/javascript" src="../libraries/aframep5_ar.js"></script>
+		<script language="javascript" type="text/javascript" src="./libraries/aframep5_ar.js"></script>
 
 		<!-- P5 Sketch -->
 		<script language="javascript" type="text/javascript" src="sketch.js"></script>
@@ -61,10 +61,10 @@
 
 			<!-- set up all of the AR markers we will be working with along with links to their 'pattern' files -->
 			<!-- note that we aren't putting any geometry inside of marker here - we will do that in the p5 sketch -->
-			<a-marker id="hiro" preset="custom" url="../markers/patt.hiro"></a-marker>
-			<a-marker id="zb" preset="custom" url="../markers/patt.zb"></a-marker>
-            <a-marker id="kanji" preset="custom" url="../markers/patt.kanji"></a-marker>
-            <a-marker id ="nyu" preset="custom" url="../markers/nyu.patt"></a-marker>
+			<a-marker id="hiro" preset="custom" url="./markers/patt.hiro"></a-marker>
+			<a-marker id="zb" preset="custom" url="./markers/patt.zb"></a-marker>
+            <a-marker id="kanji" preset="custom" url="./markers/patt.kanji"></a-marker>
+            <a-marker id ="nyu" preset="custom" url="./markers/nyu.patt"></a-marker>
 
 			<a-entity camera></a-entity>
 		</a-scene>
