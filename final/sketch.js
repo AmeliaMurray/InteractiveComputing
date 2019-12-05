@@ -102,6 +102,8 @@ function draw() {
                         allMarkers[i].children[2].baseOffset = 1;
                         allMarkers[i].children[1].baseOffset = 0;
 
+                        // swap tile 3 with tile 0 position
+
                     }
                 }
             }
@@ -132,10 +134,10 @@ class Desert{
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
-        this.container = new Container3D({x:0-0.5, y:0, z:baseOffset + 0.5});
+        this.container = new Container3D({x: 0-0.5, y: 0, z: baseOffset + 0.5});
 
         this.container.addChild( new Box({
-            x: 1 - 0.5, y: 0, z: this.baseOffset - 0.5,
+            x: 1, y: 0, z: this.baseOffset - 1,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
             red: 210, green: 180, blue: 140
@@ -152,7 +154,7 @@ class Cacti{
     constructor(){
         
         this.cacti = new OBJ({
-            x:.5, y: 0.2, z: -0.5, 
+            x:1, y: 0.2, z: -1, 
             img: 'cactus',
             asset:'cactus_obj', 
             mtl:'cactus_mtl', 
@@ -170,7 +172,7 @@ class Water{
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
-        this.container = new Container3D({x:0-0.5, y:0, z:baseOffset + 0.5})
+        this.container = new Container3D({x: 0-0.5, y: 0, z: baseOffset + 0.5})
         this.container.addChild(new Box({
             x:0, y:0, z:0,
             red: 66, green: 212, blue: 245,
@@ -198,16 +200,8 @@ class Water{
 
         this.container.addChild(new Jellies())
         
-        return this.container
+        return this.container;
         
-        
-        /*this.box1 = new Box({
-            x: 0 - 0.5, y:0, z: this.baseOffset + 0.5,
-            height: 1, width: 1, depth: 0.5,
-            rotationX:-90,
-            red: 34, green: 114, blue: 242
-        })
-        return this.box1*/
     }
 }
 
