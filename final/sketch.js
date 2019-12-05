@@ -4,6 +4,8 @@ var world;
 // create variables to hold our markers
 var markerHiro, markerZb;
 
+var baseOffset = 0;
+
 function setup() {
     world = new World('ARScene');
     var xOffset = 0;
@@ -18,31 +20,13 @@ function setup() {
         xOffset = 0
         zOffset = 0
         for (var j = 0; j < 1; j++){
-            allMarkers[i].addChild(new Mountain(xOffset, zOffset));
-            allMarkers[i].addChild(new Water(xOffset, zOffset));
-            allMarkers[i].addChild(new Rainforest(xOffset, zOffset));
-            allMarkers[i].addChild(new Desert(xOffset, zOffset));
-            // allMarkers[i].addChild(new Fbox(xOffset, zOffset));
-            // xOffset++
-            // if (xOffset >= 2){
-            //     xOffset = 0;
-            //     zOffset++
-            // }
+            allMarkers[i].addChild(new Mountain(xOffset, zOffset, baseOffset));
+            allMarkers[i].addChild(new Water(xOffset, zOffset, baseOffset));
+            allMarkers[i].addChild(new Rainforest(xOffset, zOffset, baseOffset));
+            allMarkers[i].addChild(new Desert(xOffset, zOffset, baseOffset));
         }
-
-        // allMarkers[i].addChild(new Mountain(xOffset, zOffset));
-        // allMarkers[i].addChild(new Water(xOffset, zOffset));
-        // allMarkers[i].addChild(new Rainforest(xOffset, zOffset));
-        // allMarkers[i].addChild(new Desert(xOffset, zOffset));
-
-        // xOffset++
         
-        // if (xOffset >= 2){
-        //     xOffset = 0;
-        //     zOffset++
-        // }
-        
-        //Hide Tiles
+        // Hide Tiles
         if (i == 0){
             allMarkers[i].children[0]
             allMarkers[i].children[1].hide()
@@ -78,6 +62,7 @@ function draw() {
     for (var i = 0; i < allMarkers.length; i++){
         if (allMarkers[i].isVisible() == true){
             for (var j = 0; j < allMarkers.length; j++){
+
                 if (allMarkers[i] != allMarkers[j] && allMarkers[j].isVisible() == true){
                     console.log('BOTH ARE VISIBLE')
                     fill(255);
@@ -108,34 +93,31 @@ function draw() {
                     if ((allMarkers[2].isVisible() && allMarkers[3].isVisible()) || (allMarkers[3].isVisible() && allMarkers[2].isVisible())){
                         allMarkers[i].children[j].show();
                     }
+
+                    // accounting for diagonals
+                     if (allMarkers[i].children[0].visible && allMarkers[i].children[2].visible && (allMarkers[i].children[3].visible == false) && (allMarkers[i].children[1].visible == false)){
+                        console.log('BOO!');
+
+                        // swap tile 2 with tile 1 position
+                        allMarkers[i].children[2].baseOffset = 1;
+                        allMarkers[i].children[1].baseOffset = 0;
+
+                    }
                 }
             }
+
         }
     }
 }
 
-// class Fbox{
-    
-//     constructor(xOffset, zOffset){
-//         this.xOffset = xOffset
-//         this.zOffset = zOffset
-//         this.box1 = new Box({
-//             x: this.xOffset - 0.5, y:0, z: this.zOffset -0.5,
-//             height: 1, width: 1, depth: 0.5,
-//             rotationX:-90,
-//             red: random(255), green: random(255), blue: random(255)
-//         })
-//         return this.box1
-//     }
-// }
-
 class Mountain{
     
-    constructor(xOffset, zOffset){
+    constructor(xOffset, zOffset, baseOffset){
         this.xOffset = xOffset
         this.zOffset = zOffset
+        this.baseOffset = baseOffset;
         this.box1 = new Box({
-            x: 0 - 0.5, y:0, z: 0 -0.5,
+            x: 0 - 0.5, y:0, z: this.baseOffset - 0.5,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
             red: 148, green: 184, blue: 184
@@ -146,11 +128,12 @@ class Mountain{
 
 class Desert{
     
-    constructor(xOffset, zOffset){
+    constructor(xOffset, zOffset, baseOffset){
         this.xOffset = xOffset
         this.zOffset = zOffset
+        this.baseOffset = baseOffset;
         this.box1 = new Box({
-            x: 1 - 0.5, y:0, z: 0 -0.5,
+            x: 1 - 0.5, y:0, z: this.baseOffset - 0.5,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
             red: 210, green: 180, blue: 140
@@ -161,14 +144,15 @@ class Desert{
 
 class Water{
     
-    constructor(xOffset, zOffset){
+    constructor(xOffset, zOffset, baseOffset){
         this.xOffset = xOffset
         this.zOffset = zOffset
+        this.baseOffset = baseOffset;
         this.box1 = new Box({
-            x: 0 - 0.5, y:0, z: 1 -0.5,
+            x: 0 - 0.5, y:0, z: this.baseOffset + 0.5,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
-            red: 0, green: 204, blue: 255
+            red: 34, green: 114, blue: 242
         })
         return this.box1
     }
@@ -176,11 +160,12 @@ class Water{
 
 class Rainforest{
     
-    constructor(xOffset, zOffset){
+    constructor(xOffset, zOffset, baseOffset){
         this.xOffset = xOffset
         this.zOffset = zOffset
+        this.baseOffset = baseOffset;
         this.box1 = new Box({
-            x: 1 - 0.5, y:0, z: 1 - 0.5,
+            x: 1 - 0.5, y:0, z: this.baseOffset + 0.5,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
             red: 0, green: 102, blue: 0
