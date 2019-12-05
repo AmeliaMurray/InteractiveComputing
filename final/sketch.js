@@ -251,8 +251,9 @@ class Jellies{
 
 		this.xOffset += 0.01;
 		this.yOffset += 0.01;
+        this.zOffset += 0.01;
 
-		this.jelly.nudge(xMovement/2, yMovement/2, zMovement/2);
+		this.jelly.nudge(xMovement/4, yMovement/4, zMovement/4);
         // this.jelly.y = constrain(this.jelly.y, 0, 15);
         // this.jelly.x = constrain(this.jelly.x, -50, 50);
         // this.jelly.z = constrain(this.jelly.z, -50, 50);
@@ -260,17 +261,38 @@ class Jellies{
 }
 
 class Rainforest{
-    
+
     constructor(xOffset, zOffset, baseOffset){
+        
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
-        this.box1 = new Box({
-            x: 1, y:0, z: 1,
+        this.container = new Container3D({x:1, y: 0, z: 1});
+
+        this.container.addChild( new Box({
+            x: 0, y: 0, z: 0,
             height: 2, width: 2, depth: 0.5,
             rotationX:-90,
             red: 0, green: 102, blue: 0
-        })
-        return this.box1
+        }));
+
+        this.container.addChild(new Trees())
+        return this.container;
+    }
+}
+
+class Trees{
+
+    constructor(){
+
+        this.trees = new OBJ({
+            x:0.22, y: .2, z: 0.01,
+            img: 'tree',
+            asset:'tree_obj',
+            mtl:'tree_mtl',
+            scaleX: 0.0043, scaleY: 0.004, scaleZ: 0.00375
+        });
+
+        return this.trees;
     }
 }
