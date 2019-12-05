@@ -148,13 +148,72 @@ class Water{
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
-        this.box1 = new Box({
+        this.container = new Container3D({x:0-0.5, y:0, z:baseOffset + 0.5})
+        this.container.addChild(new Box({
+            x:0, y:0, z:0,
+            red: 66, green: 212, blue: 245,
+            height: 1, width:1, depth: 0.5,
+            rotationX:-90,
+            transparent: true,
+            opacity: 0.5,
+        }))
+        this.container.addChild(new Box({
+            x:0, y:-0.1, z:0,
+            red: 66, green: 144, blue: 245,
+            height: 1, width:1, depth: 0.2,
+            rotationX:-90,
+            transparent: true,
+            opacity: 0.5,
+        }))
+        this.container.addChild(new Box({
+            x:0, y:-0.3, z:0,
+            red: 66, green: 84, blue: 245,
+            height: 1, width:1, depth: 0.2,
+            rotationX:-90,
+            transparent: true,
+            opacity: 0.5,
+        }))
+        this.container.addChild(new Jellies())
+        
+        return this.container
+        
+        
+        /*this.box1 = new Box({
             x: 0 - 0.5, y:0, z: this.baseOffset + 0.5,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
             red: 34, green: 114, blue: 242
         })
-        return this.box1
+        return this.box1*/
+    }
+}
+
+class Jellies{
+    
+    constructor(){
+        this.jelly = new OBJ({
+            x:0, y:0.2, z:0, 
+            asset:'jelly_obj', 
+            mtl:'jelly_mtl', 
+            scaleX: 0.5, scaleY: 0.5, scaleZ: 0.5
+        })
+        this.xOffset = random(1000);
+        this.yOffset = random(1000);
+        this.zOffset = random(1000);
+        return this.jelly
+    }
+    move() {
+		var yMovement = map(noise(this.yOffset), 0, 1, -0.05, 0.05);
+		var xMovement = map(noise(this.xOffset), 0, 1, -0.05, 0.05);
+		var zMovement = map(noise(this.zOffset), 0, 1, -0.05, 0.05);
+
+		this.xOffset += 0.01;
+		this.yOffset += 0.01;
+
+		this.jelly.nudge(xMovement/2, yMovement/2, zMovement/2);
+        this.jelly.y = constrain(this.jelly.y, 0, 15);
+        this.jelly.x = constrain(this.jelly.x, -50, 50);
+        this.jelly.z = constrain(this.jelly.z, -50, 50);
     }
 }
 
