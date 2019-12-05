@@ -22,8 +22,8 @@ function setup() {
         for (var j = 0; j < 1; j++){
             allMarkers[i].addChild(new Mountain(xOffset, zOffset, baseOffset));
             allMarkers[i].addChild(new Water(xOffset, zOffset, baseOffset));
-            allMarkers[i].addChild(new Rainforest(xOffset, zOffset, baseOffset));
             allMarkers[i].addChild(new Desert(xOffset, zOffset, baseOffset));
+            allMarkers[i].addChild(new Rainforest(xOffset, zOffset, baseOffset));
         }
         
         // Hide Tiles
@@ -132,14 +132,36 @@ class Desert{
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
-        this.box1 = new Box({
-            x: 1 - 0.5, y:0, z: this.baseOffset - 0.5,
+        this.container = new Container3D({x:0-0.5, y:0, z:baseOffset + 0.5});
+
+        this.container.addChild( new Box({
+            x: 1 - 0.5, y: 0, z: this.baseOffset - 0.5,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
             red: 210, green: 180, blue: 140
-        })
-        return this.box1
+        }));
+
+        this.container.addChild(new Cacti())
+        
+        return this.container;
     }
+}
+
+class Cacti{
+    
+    constructor(){
+        
+        this.cacti = new OBJ({
+            x:.5, y: 0.2, z: -0.5, 
+            img: 'cactus',
+            asset:'cactus_obj', 
+            mtl:'cactus_mtl', 
+            scaleX: 0.04, scaleY: 0.04, scaleZ: 0.04
+        });
+
+        return this.cacti;
+    }
+   
 }
 
 class Water{
@@ -173,6 +195,7 @@ class Water{
             transparent: true,
             opacity: 0.5,
         }))
+
         this.container.addChild(new Jellies())
         
         return this.container
