@@ -5,11 +5,12 @@ var world;
 var markerHiro, markerZb;
 
 var baseOffset = 0;
+var actors = [];
 
 function setup() {
     world = new World('ARScene');
     var xOffset = 0;
-    var yOffset = 0;
+    var zOffset = 0;
 
     marker1 = world.getMarker('hiro');
     marker2 = world.getMarker('zb');
@@ -58,6 +59,11 @@ function setup() {
 function draw() {
   // erase the background
   world.clearDrawingCanvas();
+
+    // move jellies
+    for (let k = 0; k < actors.length; k++){
+        actors[k].move();
+    }
     
     for (var i = 0; i < allMarkers.length; i++){
         if (allMarkers[i].isVisible() == true){
@@ -119,8 +125,8 @@ class Mountain{
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
         this.box1 = new Box({
-            x: 0 - 0.5, y:0, z: this.baseOffset - 0.5,
-            height: 1, width: 1, depth: 0.5,
+            x: -1, y:0, z: -1,
+            height: 2, width: 2, depth: 0.5,
             rotationX:-90,
             red: 148, green: 184, blue: 184
         })
@@ -134,11 +140,11 @@ class Desert{
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
-        this.container = new Container3D({x: 0-0.5, y: 0, z: baseOffset + 0.5});
+        this.container = new Container3D({x: 1, y: 0, z: -1});
 
         this.container.addChild( new Box({
-            x: 1, y: 0, z: this.baseOffset - 1,
-            height: 1, width: 1, depth: 0.5,
+            x: 0, y: 0, z: this.baseOffset,
+            height: 2, width: 2, depth: 0.5,
             rotationX:-90,
             red: 210, green: 180, blue: 140
         }));
@@ -154,16 +160,33 @@ class Cacti{
     constructor(){
         
         this.cacti = new OBJ({
-            x:1, y: 0.2, z: -1, 
+            x:0, y: 0.5, z: 0, 
             img: 'cactus',
             asset:'cactus_obj', 
             mtl:'cactus_mtl', 
-            scaleX: 0.04, scaleY: 0.04, scaleZ: 0.04
+            scaleX: 0.3, scaleY: 0.3, scaleZ: 0.3
         });
 
         return this.cacti;
     }
    
+}
+
+class DesertSurface {
+
+    constructor(){
+        
+        this.desertLandscape = new OBJ({
+            x:0, y: 0, z: 0, 
+            img: 'desert',
+            asset:'desert_obj', 
+            mtl:'desert_mtl', 
+            scaleX: 0.3, scaleY: 0.3, scaleZ: 0.3
+        });
+
+        return this.desertLandscape;
+    }
+
 }
 
 class Water{
@@ -172,11 +195,11 @@ class Water{
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
-        this.container = new Container3D({x: 0-0.5, y: 0, z: baseOffset + 0.5})
+        this.container = new Container3D({x: -1, y: 0, z: 1})
         this.container.addChild(new Box({
             x:0, y:0, z:0,
             red: 66, green: 212, blue: 245,
-            height: 1, width:1, depth: 0.5,
+            height: 2, width:2, depth: 0.5,
             rotationX:-90,
             transparent: true,
             opacity: 0.5,
@@ -184,7 +207,7 @@ class Water{
         this.container.addChild(new Box({
             x:0, y:-0.1, z:0,
             red: 66, green: 144, blue: 245,
-            height: 1, width:1, depth: 0.2,
+            height: 2, width:2, depth: 0.2,
             rotationX:-90,
             transparent: true,
             opacity: 0.5,
@@ -192,13 +215,15 @@ class Water{
         this.container.addChild(new Box({
             x:0, y:-0.3, z:0,
             red: 66, green: 84, blue: 245,
-            height: 1, width:1, depth: 0.2,
+            height: 2, width:2, depth: 0.2,
             rotationX:-90,
             transparent: true,
             opacity: 0.5,
         }))
 
-        this.container.addChild(new Jellies())
+        this.myJelly = new Jellies();
+        actors.push(this.myJelly);
+        this.container.addChild(this.myJelly.jelly);
         
         return this.container;
         
@@ -217,8 +242,8 @@ class Jellies{
         this.xOffset = random(1000);
         this.yOffset = random(1000);
         this.zOffset = random(1000);
-        return this.jelly
     }
+
     move() {
 		var yMovement = map(noise(this.yOffset), 0, 1, -0.05, 0.05);
 		var xMovement = map(noise(this.xOffset), 0, 1, -0.05, 0.05);
@@ -228,9 +253,9 @@ class Jellies{
 		this.yOffset += 0.01;
 
 		this.jelly.nudge(xMovement/2, yMovement/2, zMovement/2);
-        this.jelly.y = constrain(this.jelly.y, 0, 15);
-        this.jelly.x = constrain(this.jelly.x, -50, 50);
-        this.jelly.z = constrain(this.jelly.z, -50, 50);
+        // this.jelly.y = constrain(this.jelly.y, 0, 15);
+        // this.jelly.x = constrain(this.jelly.x, -50, 50);
+        // this.jelly.z = constrain(this.jelly.z, -50, 50);
     }
 }
 
@@ -241,8 +266,8 @@ class Rainforest{
         this.zOffset = zOffset
         this.baseOffset = baseOffset;
         this.box1 = new Box({
-            x: 1 - 0.5, y:0, z: this.baseOffset + 0.5,
-            height: 1, width: 1, depth: 0.5,
+            x: 1, y:0, z: 1,
+            height: 2, width: 2, depth: 0.5,
             rotationX:-90,
             red: 0, green: 102, blue: 0
         })
