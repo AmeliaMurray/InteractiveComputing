@@ -22,8 +22,8 @@ function setup() {
         for (var j = 0; j < 1; j++){
             allMarkers[i].addChild(new Mountain(xOffset, zOffset, baseOffset));
             allMarkers[i].addChild(new Water(xOffset, zOffset, baseOffset));
-            allMarkers[i].addChild(new Desert(xOffset, zOffset, baseOffset));
             allMarkers[i].addChild(new Rainforest(xOffset, zOffset, baseOffset));
+            allMarkers[i].addChild(new Desert(xOffset, zOffset, baseOffset));
         }
         
         // Hide Tiles
