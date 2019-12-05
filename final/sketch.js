@@ -17,14 +17,30 @@ function setup() {
     for (var i = 0; i < allMarkers.length; i++){
         xOffset = 0
         zOffset = 0
-        for (var j = 0; j < 4; j++){
-            allMarkers[i].addChild(new Fbox(xOffset, zOffset));
-            xOffset++
-            if (xOffset >= 2){
-                xOffset = 0;
-                zOffset++
-            }
+        for (var j = 0; j < 1; j++){
+            allMarkers[i].addChild(new Mountain(xOffset, zOffset));
+            allMarkers[i].addChild(new Water(xOffset, zOffset));
+            allMarkers[i].addChild(new Rainforest(xOffset, zOffset));
+            allMarkers[i].addChild(new Desert(xOffset, zOffset));
+            // allMarkers[i].addChild(new Fbox(xOffset, zOffset));
+            // xOffset++
+            // if (xOffset >= 2){
+            //     xOffset = 0;
+            //     zOffset++
+            // }
         }
+
+        // allMarkers[i].addChild(new Mountain(xOffset, zOffset));
+        // allMarkers[i].addChild(new Water(xOffset, zOffset));
+        // allMarkers[i].addChild(new Rainforest(xOffset, zOffset));
+        // allMarkers[i].addChild(new Desert(xOffset, zOffset));
+
+        // xOffset++
+        
+        // if (xOffset >= 2){
+        //     xOffset = 0;
+        //     zOffset++
+        // }
         
         //Hide Tiles
         if (i == 0){
@@ -98,16 +114,76 @@ function draw() {
     }
 }
 
-class Fbox{
+// class Fbox{
+    
+//     constructor(xOffset, zOffset){
+//         this.xOffset = xOffset
+//         this.zOffset = zOffset
+//         this.box1 = new Box({
+//             x: this.xOffset - 0.5, y:0, z: this.zOffset -0.5,
+//             height: 1, width: 1, depth: 0.5,
+//             rotationX:-90,
+//             red: random(255), green: random(255), blue: random(255)
+//         })
+//         return this.box1
+//     }
+// }
+
+class Mountain{
     
     constructor(xOffset, zOffset){
         this.xOffset = xOffset
         this.zOffset = zOffset
         this.box1 = new Box({
-            x: this.xOffset - 0.5, y:0, z: this.zOffset -0.5,
+            x: 0 - 0.5, y:0, z: 0 -0.5,
             height: 1, width: 1, depth: 0.5,
             rotationX:-90,
-            red: random(255), green: random(255), blue: random(255)
+            red: 148, green: 184, blue: 184
+        })
+        return this.box1
+    }
+}
+
+class Desert{
+    
+    constructor(xOffset, zOffset){
+        this.xOffset = xOffset
+        this.zOffset = zOffset
+        this.box1 = new Box({
+            x: 1 - 0.5, y:0, z: 0 -0.5,
+            height: 1, width: 1, depth: 0.5,
+            rotationX:-90,
+            red: 210, green: 180, blue: 140
+        })
+        return this.box1
+    }
+}
+
+class Water{
+    
+    constructor(xOffset, zOffset){
+        this.xOffset = xOffset
+        this.zOffset = zOffset
+        this.box1 = new Box({
+            x: 0 - 0.5, y:0, z: 1 -0.5,
+            height: 1, width: 1, depth: 0.5,
+            rotationX:-90,
+            red: 0, green: 204, blue: 255
+        })
+        return this.box1
+    }
+}
+
+class Rainforest{
+    
+    constructor(xOffset, zOffset){
+        this.xOffset = xOffset
+        this.zOffset = zOffset
+        this.box1 = new Box({
+            x: 1 - 0.5, y:0, z: 1 - 0.5,
+            height: 1, width: 1, depth: 0.5,
+            rotationX:-90,
+            red: 0, green: 102, blue: 0
         })
         return this.box1
     }
