@@ -21,25 +21,25 @@ function setup() {
     var zOffset = 0;
 
     marker1 = world.getMarker('hiro');
-    marker2 = world.getMarker('zb'); 
-    marker3 = world.getMarker('kanji'); 
-    marker4 = world.getMarker('nyu'); 
+    marker2 = world.getMarker('zb');
+    marker3 = world.getMarker('kanji');
+    marker4 = world.getMarker('nyu');
 
     var previousGameState = window.localStorage.getItem("previousGameState");
-    
+
     if (!previousGameState){
         console.log("starting new game");
 
-        markerMountain = new markerOBJ(marker1);
+        markerMountain = new markerOBJ(marker1, "marker1");
         markerMountain.addTile("Mountain");
 
-        markerWater = new markerOBJ(marker2);
+        markerWater = new markerOBJ(marker2, "marker2");
         markerWater.addTile("Water");
 
-        markerRF = new markerOBJ(marker3);
+        markerRF = new markerOBJ(marker3, "marker3");
         markerRF.addTile("Rainforest");
 
-        markerDesert = new markerOBJ(marker4);
+        markerDesert = new markerOBJ(marker4, "marker4");
         markerDesert.addTile("Desert");
 
         window.localStorage.setItem("previousGameState", "saved");
@@ -51,11 +51,11 @@ function setup() {
     } else {
 
         console.log("loading previous game");
-        
-        markerMountain = new markerOBJ(marker1);
-        markerWater = new markerOBJ(marker2);
-        markerRF = new markerOBJ(marker3);
-        markerDesert = new markerOBJ(marker4);
+
+        markerMountain = new markerOBJ(marker1, "marker1");
+        markerWater = new markerOBJ(marker2, "marker2");
+        markerRF = new markerOBJ(marker3, "marker3");
+        markerDesert = new markerOBJ(marker4, "marker4");
 
         var previousM1 = window.localStorage.getItem("marker1");
         var previousM2 = window.localStorage.getItem("marker2");
@@ -64,20 +64,58 @@ function setup() {
 
         var m1Scenes = previousM1.split(',');
         for (let i = 0; i < m1Scenes.length; i++){
-
             // mountain
             if (m1Scenes[i] === "Water") {
                 markerMountain.addTile("Water");
-            } else if(m1Scenes[i] === "Rainforest"){
+            } else if (m1Scenes[i] === "Rainforest"){
                 markerMountain.addTile("Rainforest");
             } else if (m1Scenes[i] === "Desert"){
                 markerMountain.addTile("Desert");
             } else if (m1Scenes[i] === "Mountain") {
                 markerMountain.addTile("Mountain");
             }
-
         }
-        
+        var m2Scenes = previousM2.split(',');
+        for (let i = 0; i < m2Scenes.length; i++){
+            // water
+            if (m2Scenes[i] === "Water") {
+                markerWater.addTile("Water");
+            } else if (m2Scenes[i] === "Rainforest"){
+                markerWater.addTile("Rainforest");
+            } else if (m2Scenes[i] === "Desert"){
+                markerWater.addTile("Desert");
+            } else if (m2Scenes[i] === "Mountain") {
+                markerWater.addTile("Mountain");
+            }
+        }
+        var m3Scenes = previousM3.split(',');
+        for (let i = 0; i < m3Scenes.length; i++){
+            // RF
+            if (m3Scenes[i] === "Water") {
+                markerRF.addTile("Water");
+            } else if (m3Scenes[i] === "Rainforest"){
+                markerRF.addTile("Rainforest");
+            } else if (m3Scenes[i] === "Desert"){
+                markerRF.addTile("Desert");
+            } else if (m3Scenes[i] === "Mountain") {
+                markerRF.addTile("Mountain");
+            }
+        }
+        var m4Scenes = previousM4.split(',');
+        for (let i = 0; i < m4Scenes.length; i++){
+            // desert
+            if (m4Scenes[i] === "Water") {
+                markerDesert.addTile("Water");
+            } else if (m4Scenes[i] === "Rainforest"){
+                markerDesert.addTile("Rainforest");
+            } else if (m4Scenes[i] === "Desert"){
+                markerDesert.addTile("Desert");
+            } else if (m4Scenes[i] === "Mountain") {
+                markerDesert.addTile("Mountain");
+            }
+        }
+
+
         // duplicate code for M1 scenes to the other markers
 
         // water
@@ -88,7 +126,7 @@ function setup() {
 
     }
 
-    
+
 
     allMarkers = [markerMountain, markerWater, markerRF, markerDesert];
 
@@ -115,15 +153,21 @@ function draw() {
 
             if (!presentTiles[j].myTiles.includes(toAdd)){
                 presentTiles[j].addTile(toAdd); // adding newly entered tile to the tiles of present markers
+                var newStorageString = window.localStorage.getItem( presentTiles[j].markerName )
+                newStorageString += "," + toAdd
+                window.localStorage.setItem( presentTiles[j].markerName, newStorageString )
             }
 
             if (!newMarker.myTiles.includes(presentTiles[j].myTiles[0])){
                 newMarker.addTile(presentTiles[j].myTiles[0]); // add present tiles to newly displayed tile
+                var newStorageString = window.localStorage.getItem( newMarker.markerName )
+                newStorageString += "," + presentTiles[j].myTiles[0]
+                window.localStorage.setItem( newMarker.markerName, newStorageString )
             }
         }
 
     }
-    
+
     for (var i = 0; i < allMarkers.length; i++){
 
         if (allMarkers[i].marker.isVisible() == true){
@@ -136,7 +180,7 @@ function draw() {
 }
 
 class Mountain{
-    
+
     constructor(x, y, z){
         this.container = new Container3D({x: x, y: y, z: z});
         console.log("Mountain: ", x, y, z)
@@ -153,9 +197,9 @@ class Mountain{
 }
 
 class Desert{
-    
+
     constructor(x, y, z){
-       
+
         this.container = new Container3D({x: x, y: y, z: z});
         console.log("Desert: ", x, y, z)
 
@@ -168,37 +212,37 @@ class Desert{
         }));
 
         this.container.addChild(new Cacti());
-        
+
         return this.container;
     }
 }
 
 class Cacti{
-    
+
     constructor(){
-        
+
         this.cacti = new OBJ({
-            x:0, y: 0.5, z: 0, 
+            x:0, y: 0.5, z: 0,
             img: 'cactus',
-            asset:'cactus_obj', 
-            mtl:'cactus_mtl', 
+            asset:'cactus_obj',
+            mtl:'cactus_mtl',
             scaleX: 0.3, scaleY: 0.3, scaleZ: 0.3
         });
 
         return this.cacti;
     }
-   
+
 }
 
 class DesertSurface {
 
     constructor(){
-        
+
         this.desertLandscape = new OBJ({
-            x:0, y: 0, z: 0, 
+            x:0, y: 0, z: 0,
             img: 'desert',
-            asset:'desert_obj', 
-            mtl:'desert_mtl', 
+            asset:'desert_obj',
+            mtl:'desert_mtl',
             scaleX: 0.3, scaleY: 0.3, scaleZ: 0.3
         });
 
@@ -208,7 +252,7 @@ class DesertSurface {
 }
 
 class Water{
-    
+
     constructor(x, y, z){
         this.container = new Container3D({x: x, y: y, z: z})
         console.log("Water:", x, y, z)
@@ -220,6 +264,7 @@ class Water{
             transparent: true,
             opacity: 0.5,
         }))
+        
         // this.container.addChild(new Box({
         //     x:0, y:-0.1, z:0,
         //     red: 66, green: 144, blue: 245,
@@ -240,19 +285,19 @@ class Water{
         this.myJelly = new Jellies();
         actors.push(this.myJelly);
         this.container.addChild(this.myJelly.jelly);
-        
+
         return this.container;
-        
+
     }
 }
 
 class Jellies{
-    
+
     constructor(){
         this.jelly = new OBJ({
-            x:0, y:0.2, z:0, 
-            asset:'jelly_obj', 
-            mtl:'jelly_mtl', 
+            x:0, y:0.2, z:0,
+            asset:'jelly_obj',
+            mtl:'jelly_mtl',
             scaleX: 0.5, scaleY: 0.5, scaleZ: 0.5
         })
         this.xOffset = random(1000);
@@ -270,7 +315,7 @@ class Jellies{
         this.zOffset += 0.01;
 
 		this.jelly.nudge(xMovement/4, yMovement/4, zMovement/4);
-    
+
     }
 }
 
@@ -312,8 +357,9 @@ class Trees{
 
 class markerOBJ {
 
-    constructor(marker){
+    constructor(marker, markerName){
         this.marker = marker;
+        this.markerName = markerName;
         this.tileCount = 0;
         this.inPreviousFrame = false;
         this.myTiles = [];
