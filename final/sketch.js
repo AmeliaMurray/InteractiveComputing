@@ -75,6 +75,7 @@ function setup() {
                 markerMountain.addTile("Mountain");
             }
         }
+
         var m2Scenes = previousM2.split(',');
         for (let i = 0; i < m2Scenes.length; i++){
             // water
@@ -88,6 +89,7 @@ function setup() {
                 markerWater.addTile("Mountain");
             }
         }
+
         var m3Scenes = previousM3.split(',');
         for (let i = 0; i < m3Scenes.length; i++){
             // RF
@@ -101,6 +103,7 @@ function setup() {
                 markerRF.addTile("Mountain");
             }
         }
+
         var m4Scenes = previousM4.split(',');
         for (let i = 0; i < m4Scenes.length; i++){
             // desert
@@ -115,18 +118,7 @@ function setup() {
             }
         }
 
-
-        // duplicate code for M1 scenes to the other markers
-
-        // water
-
-        // rf
-
-        // desert
-
     }
-
-
 
     allMarkers = [markerMountain, markerWater, markerRF, markerDesert];
 
