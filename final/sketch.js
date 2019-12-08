@@ -6,6 +6,9 @@ var markerHiro, markerZb;
 
 var baseOffset = 0;
 var actors = [];
+var mountainActors = [];
+var bear
+var littleCube1
 
 // 2D array of tile positions -- FIX
 var xyzArray = [
@@ -120,8 +123,6 @@ function setup() {
 
     }
 
-    allMarkers = [markerMountain, markerWater, markerRF, markerDesert];
-
 }
 
 
@@ -132,6 +133,10 @@ function draw() {
     // move jellies
     for (let k = 0; k < actors.length; k++){
         actors[k].move();
+    }
+
+    for (let j = 0; j < mountainActors.length; j++){
+        mountainActors[j].move();
     }
 
     var newMarker = findNewMarker();
@@ -181,12 +186,120 @@ class Mountain{
             x: 0, y:0, z: 0,
             height: 2, width: 2, depth: 0.5,
             rotationX:-90,
-            red: 148, green: 184, blue: 184
+            red: 63, green: 45, blue: 39
         }));
 
+        this.container.addChild(new MountainLandscape());
+        this.container.addChild(new Pinetree(-0.75, 0.6, -0.75));
+        this.container.addChild(new Pinetree(0.3, 0.6, -.8));
+        this.container.addChild(new Pinetree(0.8, 0.6, -.5));
+        this.container.addChild(new Pinetree(-0.8, 0.6, .7));
+        this.container.addChild(new Cloud(0, 1.5, -0.3));
+        this.container.addChild(new Hawk(0, 1.5, 0.3, -20));
+        this.container.addChild(new Hawk(0.7, 1, -0.3, 40));
+
+        this.myBear = new Bear();
+        mountainActors.push(this.myBear);
+        this.container.addChild(this.myBear.bear);
+
         return this.container;
+        
     }
 }
+
+class MountainLandscape{
+    constructor(){
+
+        this.mountainLandscape = new OBJ({
+            x:0, y: .45, z: 0,
+            asset:'mountain_obj',
+            mtl:'mountain_mtl',
+            scaleX: 3, scaleY: 3, scaleZ: 3
+        });
+
+        return this.mountainLandscape;
+    }
+}
+
+class Bear{
+
+    constructor(){
+
+        this.bear = new OBJ({
+            x:.75, y: 0.25, z: .5,
+            img: 'bear',
+            asset:'bear_obj',
+            mtl:'bear_mtl',
+            scaleX: 0.03, scaleY: 0.03, scaleZ: 0.03
+        });
+
+        this.xOffset = random(1000);
+        this.yOffset = random(1000);
+        this.zOffset = random(1000);
+
+        // not sure if i need this line or not but phillip doesn't have it
+        //return this.bear;
+    }
+
+    move() {
+    
+        var bearX = map(noise(this.yOffset), 0, 1, -0.05, 0.05);
+        var bearY = map(noise(this.xOffset), 0, 1, -0.05, 0.05);
+        var bearZ = map(noise(this.zOffset), 0, 1, -0.05, 0.05);
+
+		this.xOffset += 0.01;
+		this.yOffset += 0.01;
+        this.zOffset += 0.01;
+
+        this.bear.nudge(bearX/4, bearY/4, bearZ/4)
+    }
+}
+
+
+class Pinetree{
+
+    constructor(xCoord, yCoord, zCoord){
+
+        this.pinetree = new OBJ({
+            x:xCoord, y: yCoord, z: zCoord,
+            asset:'pinetree_obj',
+            mtl:'pinetree_mtl',
+            scaleX: 0.25, scaleY: 0.25, scaleZ: 0.25,
+            rotationY: 90
+        });
+        return this.pinetree;
+    }
+}
+
+class Cloud{
+
+    constructor(xCoord, yCoord, zCoord){
+
+        this.cloud = new OBJ ({
+            asset: 'cloud_obj', mtl: 'cloud_mtl',
+            x: xCoord, y: yCoord, z: zCoord,
+            scaleX:2, scaleY: 2, scaleZ: 2,
+            rotationX: 90
+        })
+        return this.cloud;
+    }
+}
+
+class Hawk{
+
+    constructor(xCoord, yCoord, zCoord, yRotate){
+
+        this.hawk = new OBJ ({
+            asset: 'hawk_obj', mtl: 'hawk_mtl',
+            x: xCoord, y: yCoord, z: zCoord,
+            scaleX:0.001, scaleY: 0.001, scaleZ: 0.001,
+            rotationX: -90, rotationY: yRotate
+        })
+        return this.hawk;
+    }
+}
+
+
 
 class Desert{
 
