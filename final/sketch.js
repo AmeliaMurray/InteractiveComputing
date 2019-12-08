@@ -123,6 +123,9 @@ function setup() {
 
     }
 
+    allMarkers = [markerMountain, markerWater, markerRF, markerDesert];
+
+
 }
 
 
