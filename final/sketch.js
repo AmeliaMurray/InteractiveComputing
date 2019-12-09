@@ -7,10 +7,11 @@ var markerHiro, markerZb;
 var baseOffset = 0;
 var actors = [];
 var mountainActors = [];
-var bear
-var littleCube1
+var tumbleActors = [];
+var bear;
+var littleCube1;
 
-// 2D array of tile positions -- FIX
+// 2D array of tile positions
 var xyzArray = [
                     [-1, 0, -1], // index 0 tile
                     [-1, 0, 1], // index 1 tile
@@ -141,6 +142,10 @@ function draw() {
     for (let j = 0; j < mountainActors.length; j++){
         mountainActors[j].move();
     }
+
+    // for (let v = 0; v < tumbleActors.length; v++){
+    //     tumbleActors[v].move();
+    // }
 
     var newMarker = findNewMarker();
 
@@ -314,7 +319,6 @@ class Desert{
         this.container = new Container3D({x: x, y: y, z: z});
         console.log("Desert: ", x, y, z)
 
-
         this.container.addChild( new Box({
             x: 0, y: 0, z: 0,
             height: 2, width: 2, depth: 0.5,
@@ -322,7 +326,16 @@ class Desert{
             red: 210, green: 180, blue: 140
         }));
 
+        // add 3 tumbleweeds
+        // for (let i = 0; i < 3; i++){
+        //     this.tumbleweed = new Tumbleweed();
+        //     tumbleActors.push(this.tumbleweed);
+        //     this.container.addChild(this.tumbleweed.tumble);
+        // }
+
+        this.container.addChild(new Tumbleweed());
         this.container.addChild(new Cacti());
+        this.container.addChild(new DesertSurface());
 
         return this.container;
     }
@@ -333,14 +346,49 @@ class Cacti{
     constructor(){
 
         this.cacti = new OBJ({
-            x:0, y: 0.5, z: 0,
+            x:-.35, y: 0.5, z: .4,
             img: 'cactus',
             asset:'cactus_obj',
             mtl:'cactus_mtl',
-            scaleX: 0.3, scaleY: 0.3, scaleZ: 0.3
+            scaleX: 0.15, scaleY: 0.28, scaleZ: 0.15
         });
 
         return this.cacti;
+    }
+
+}
+
+class Tumbleweed{
+
+    constructor(){
+        this.tumble = new OBJ({
+            x:0, y: 0.35, z: 0,
+            asset:'tumble_obj',
+            mtl:'tumble_mtl',
+            scaleX: 0.15, scaleY: 0.15, scaleZ: 0.15
+        });
+
+        this.xOffset = random(1000);
+        this.yOffset = random(1000);
+        this.zOffset = random(1000);
+
+        return this.tumble;
+    }
+
+    move() {
+        var yMovement = map(noise(this.yOffset), 0, 1, -0.05, 0.05);
+        var xMovement = map(noise(this.xOffset), 0, 1, -0.05, 0.05);
+        var zMovement = map(noise(this.zOffset), 0, 1, -0.05, 0.05);
+
+        this.xOffset += 0.01;
+        this.yOffset += 0.01;
+        this.zOffset += 0.01;
+
+        this.tumble.nudge(xMovement/4, yMovement/4, zMovement/4);
+        this.tumble.y = constrain(this.tumble.y, -0.5, 0.2);
+        this.tumble.x = constrain(this.tumble.x, -0.75, 0.75);
+        this.tumble.z = constrain(this.tumble.z, -0.75, 0.75);
+
     }
 
 }
@@ -350,11 +398,11 @@ class DesertSurface {
     constructor(){
 
         this.desertLandscape = new OBJ({
-            x:0, y: 0, z: 0,
-            img: 'desert',
-            asset:'desert_obj',
-            mtl:'desert_mtl',
-            scaleX: 0.3, scaleY: 0.3, scaleZ: 0.3
+            x:0, y: .18, z: 0,
+            img: 'dland',
+            asset:'dland_obj',
+            mtl:'dland_mtl',
+            scaleX: 0.002, scaleY: 0.002, scaleZ: 0.002
         });
 
         return this.desertLandscape;
@@ -420,6 +468,7 @@ class Jellies{
             mtl:'jelly_mtl',
             scaleX: 0.5, scaleY: 0.5, scaleZ: 0.5
         })
+
         this.xOffset = random(1000);
         this.yOffset = random(1000);
         this.zOffset = random(1000);
@@ -475,6 +524,9 @@ class Rainforest{
         }));
 
         this.container.addChild(new Trees())
+        this.container.addChild(new Parrots(0, 1.5, 0.3, -20));
+        this.container.addChild(new Rains(0.5, .5, -0.3, 40));
+
         return this.container;
     }
 }
@@ -492,6 +544,39 @@ class Trees{
         });
 
         return this.trees;
+    }
+}
+
+class Parrots{
+
+    constructor(){
+
+        this.parrots = new OBJ({
+            x:0.22, y: 1.2, z: 0.01,
+            img: 'parrot',
+            asset:'parrot_obj',
+            mtl:'parrot_mtl',
+            scaleX: 0.001, scaleY: 0.001, scaleZ: 0.001
+        });
+
+        return this.parrots;
+    }
+}
+
+
+class Rains{
+
+    constructor(){
+
+        this.rains = new OBJ({
+            x:-.5, y: 1.2, z: -.5,
+            img: 'rain',
+            asset:'rain_obj',
+            mtl:'rain_mtl',
+            scaleX: .7, scaleY: .7, scaleZ: .7,
+        });
+
+        return this.rains;
     }
 }
 
