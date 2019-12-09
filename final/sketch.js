@@ -237,7 +237,7 @@ class Bear{
         });
 
         this.xOffset = random(1000);
-        this.yOffset = random(1000);
+        this.yOffset = 0;
         this.zOffset = random(1000);
 
         // not sure if i need this line or not but phillip doesn't have it
@@ -247,14 +247,17 @@ class Bear{
     move() {
     
         var bearX = map(noise(this.yOffset), 0, 1, -0.05, 0.05);
-        var bearY = map(noise(this.xOffset), 0, 1, -0.05, 0.05);
+        var bearY = 0
         var bearZ = map(noise(this.zOffset), 0, 1, -0.05, 0.05);
 
 		this.xOffset += 0.01;
-		this.yOffset += 0.01;
+		this.yOffset += 0;
         this.zOffset += 0.01;
 
         this.bear.nudge(bearX/4, bearY/4, bearZ/4)
+        this.bear.y = constrain(this.bear.y, -0.5, 0.2);
+        this.bear.x = constrain(this.bear.x, -0.75, 0.75);
+        this.bear.z = constrain(this.bear.z, -0.75, 0.75);
     }
 }
 
@@ -366,11 +369,18 @@ class Water{
         console.log("Water:", x, y, z)
         this.container.addChild(new Box({
             x:0, y:0, z:0,
-            red: 66, green: 212, blue: 245,
+            /*red: 66, green: 212, blue: 245,*/ asset: 'ocean', repeatX:2, repeatY:2,
             height: 2, width:2, depth: 0.5,
             rotationX:-90,
             transparent: true,
-            opacity: 0.5,
+            opacity: 0.7,
+        }))
+        
+        this.container.addChild(new OBJ({
+            x:0.18, y:0.3, z:0,
+            asset:'island_obj',
+            mtl:'island_mtl',
+            scaleX: 0.01, scaleY: 0.01, scaleZ: 0.01
         }))
         
         // this.container.addChild(new Box({
@@ -391,9 +401,11 @@ class Water{
         // }))
 
         this.myJelly = new Jellies();
+        this.mySun = new Sun()
         actors.push(this.myJelly);
         this.container.addChild(this.myJelly.jelly);
-
+        actors.push(this.mySun);
+        this.container.addChild(this.mySun.sun)
         return this.container;
 
     }
@@ -423,7 +435,27 @@ class Jellies{
         this.zOffset += 0.01;
 
 		this.jelly.nudge(xMovement/4, yMovement/4, zMovement/4);
+        this.jelly.y = constrain(this.jelly.y, -0.5, 0.2);
+        this.jelly.x = constrain(this.jelly.x, -0.75, 0.75);
+        this.jelly.z = constrain(this.jelly.z, -0.75, 0.75);
 
+    }
+}
+
+class Sun{
+    
+    constructor(){
+        this.sun = new OBJ({
+            x:-0.5, y:1, z:-0.5,
+            red:249, green:215, blue:28,
+            asset:'sun_obj',
+            mtl: 'sun_obj',
+            scaleX: 0.003, scaleY: 0.003, scaleZ: 0.003
+        })
+    }
+    
+    move(){
+        this.sun.spinY(1)
     }
 }
 

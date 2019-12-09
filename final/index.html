@@ -59,8 +59,18 @@
 		<!-- Define A-Frame VR Scene and set it up so that it will be manipulated through AR.js -->
 		<a-scene id="ARScene" embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono;'>
             
+            <a-asset id='ocean' src='assets/water/water.jpg'></a-asset>
             <a-asset id='jelly_obj' src='assets/water/jelly/model.obj'></a-asset>
 			<a-asset id='jelly_mtl' src='assets/water/jelly/materials.mtl'></a-asset>
+            
+            <a-asset id='fish_obj' src='assets/water/fish/Mesh_Goldfish.obj'></a-asset>
+			<a-asset id='fish_mtl' src='assets/water/fish/Mesh_Goldfish.mtl'></a-asset>
+            
+            <a-asset id='island_obj' src='assets/water/island/1220%20Island.obj'></a-asset>
+			<a-asset id='island_mtl' src='assets/water/island/1220%20Island.mtl'></a-asset>
+            
+            <a-asset id='sun_obj' src='assets/water/sun/sun_02.obj'></a-asset>
+			<a-asset id='sun_mtl' src='assets/water/sun/sun_02.mtl'></a-asset>
 			
 			<img id="cactus" src="assets/desert/cactus/PUSHILIN_prickly_pear_cactus.png"/>
 			<a-asset id="cactus_obj" src="assets/desert/cactus/cactus.obj"></a-asset>
