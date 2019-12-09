@@ -143,9 +143,9 @@ function draw() {
         mountainActors[j].move();
     }
 
-    // for (let v = 0; v < tumbleActors.length; v++){
-    //     tumbleActors[v].move();
-    // }
+    for (let v = 0; v < tumbleActors.length; v++){
+        tumbleActors[v].move();
+    }
 
     var newMarker = findNewMarker();
 
@@ -327,13 +327,13 @@ class Desert{
         }));
 
         // add 3 tumbleweeds
-        // for (let i = 0; i < 3; i++){
-        //     this.tumbleweed = new Tumbleweed();
-        //     tumbleActors.push(this.tumbleweed);
-        //     this.container.addChild(this.tumbleweed.tumble);
-        // }
+        for (let i = 0; i < 3; i++){
+            this.tumbleweed = new Tumbleweed();
+            tumbleActors.push(this.tumbleweed);
+            this.container.addChild(this.tumbleweed.tumble);
+        }
 
-        this.container.addChild(new Tumbleweed());
+        // this.container.addChild(new Tumbleweed());
         this.container.addChild(new Cacti());
         this.container.addChild(new DesertSurface());
 
@@ -361,33 +361,38 @@ class Cacti{
 class Tumbleweed{
 
     constructor(){
+
         this.tumble = new OBJ({
-            x:0, y: 0.35, z: 0,
+            x: random(-.75, .75), y: 0.35, z: random(-.75, .75),
             asset:'tumble_obj',
             mtl:'tumble_mtl',
-            scaleX: 0.15, scaleY: 0.15, scaleZ: 0.15
+            scaleX: 0.16, scaleY: 0.16, scaleZ: 0.16
         });
 
         this.xOffset = random(1000);
         this.yOffset = random(1000);
         this.zOffset = random(1000);
 
-        return this.tumble;
     }
 
     move() {
+
         var yMovement = map(noise(this.yOffset), 0, 1, -0.05, 0.05);
         var xMovement = map(noise(this.xOffset), 0, 1, -0.05, 0.05);
         var zMovement = map(noise(this.zOffset), 0, 1, -0.05, 0.05);
 
         this.xOffset += 0.01;
         this.yOffset += 0.01;
-        this.zOffset += 0.01;
+        this.zOffset += 0.012;
 
         this.tumble.nudge(xMovement/4, yMovement/4, zMovement/4);
-        this.tumble.y = constrain(this.tumble.y, -0.5, 0.2);
+        this.tumble.y = constrain(this.tumble.y, .35, 0.55);
         this.tumble.x = constrain(this.tumble.x, -0.75, 0.75);
         this.tumble.z = constrain(this.tumble.z, -0.75, 0.75);
+
+        this.tumble.spinX(1);
+        this.tumble.spinY(.5);
+        this.tumble.spinZ(.8);
 
     }
 
@@ -449,7 +454,7 @@ class Water{
         // }))
 
         this.myJelly = new Jellies();
-        this.mySun = new Sun()
+        this.mySun = new Sun();
         actors.push(this.myJelly);
         this.container.addChild(this.myJelly.jelly);
         actors.push(this.mySun);
