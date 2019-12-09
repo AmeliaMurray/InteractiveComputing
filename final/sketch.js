@@ -193,7 +193,7 @@ function draw() {
 
     fill(255);
     textSize(14);
-    text("Resources: " + resources, 35, 150);
+    text("Time: " + h + ": " + m, 35, 153);
 
     // increment resources by 5 every 30 min
     if ((m === 0 || m === 30 || m === 39) && addResources === false){
@@ -214,7 +214,7 @@ function draw() {
 
     fill(255);
     textSize(14);
-    text("Time: " + h + ": " + m, 35, 175);
+    text("Resources: " + resources, 35, 175);
 
 }
 
