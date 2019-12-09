@@ -10,6 +10,8 @@ var mountainActors = [];
 var tumbleActors = [];
 var bear;
 var littleCube1;
+var resources = 10; // starting number of resources
+var addResources = false;
 
 // 2D array of tile positions
 var xyzArray = [
@@ -133,6 +135,8 @@ function setup() {
 function draw() {
   // erase the background
   world.clearDrawingCanvas();
+  let h = hour();
+  let m = minute();
 
     // move jellies
     for (let k = 0; k < actors.length; k++){
@@ -181,6 +185,36 @@ function draw() {
             allMarkers[i].inPreviousFrame = false;
         }
     }
+
+    fill(105, 166, 219, 150);
+    noStroke();
+    rectMode(CENTER);
+    rect(90, 158, 140, 50);
+
+    fill(255);
+    textSize(14);
+    text("Resources: " + resources, 35, 150);
+
+    // increment resources by 5 every 30 min
+    if ((m === 0 || m === 30 || m === 39) && addResources === false){
+        addResources = true;
+        resources += 5;
+    } 
+    
+    if (addResources === true && (m !== 39 && m !== 30 && m !== 0)){
+        console.log("inside second if statement");
+        addResources = false;
+    }
+
+    console.log(addResources);
+
+    if (m < 10){
+        m = "0" + m; // adding a "0" in front of the minutes, if less than 10 min, format-wise
+    }
+
+    fill(255);
+    textSize(14);
+    text("Time: " + h + ": " + m, 35, 175);
 
 }
 
@@ -333,7 +367,6 @@ class Desert{
             this.container.addChild(this.tumbleweed.tumble);
         }
 
-        // this.container.addChild(new Tumbleweed());
         this.container.addChild(new Cacti());
         this.container.addChild(new DesertSurface());
 
@@ -403,7 +436,7 @@ class DesertSurface {
     constructor(){
 
         this.desertLandscape = new OBJ({
-            x:0, y: .18, z: 0,
+            x:0, y: .17, z: 0,
             img: 'dland',
             asset:'dland_obj',
             mtl:'dland_mtl',
