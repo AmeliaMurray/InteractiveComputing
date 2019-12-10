@@ -12,6 +12,9 @@ var bear;
 var littleCube1;
 var resources = 10; // starting number of resources
 var addResources = false;
+var overallState = 0;
+var img
+
 
 // 2D array of tile positions
 var xyzArray = [
@@ -21,6 +24,9 @@ var xyzArray = [
                     [1, 0, -1] // index 3 tile
                 ];
 
+function preload(){
+    img = loadImage('assets/startLogo.png')
+}
 function setup() {
     world = new World('ARScene');
     var xOffset = 0;
@@ -133,89 +139,149 @@ function setup() {
 
 
 function draw() {
-  // erase the background
-  world.clearDrawingCanvas();
-  let h = hour();
-  let m = minute();
-
-    // move jellies
-    for (let k = 0; k < actors.length; k++){
-        actors[k].move();
-    }
-
-    for (let j = 0; j < mountainActors.length; j++){
-        mountainActors[j].move();
-    }
-
-    for (let v = 0; v < tumbleActors.length; v++){
-        tumbleActors[v].move();
-    }
-
-    var newMarker = findNewMarker();
-
-    if (newMarker !== null){
-
-        var toAdd = newMarker.myTiles[0];
-        var presentTiles = findVisibleMarkers();
-
-        for (let j = 0; j < presentTiles.length; j++){
-
-            if (!presentTiles[j].myTiles.includes(toAdd)){
-                presentTiles[j].addTile(toAdd); // adding newly entered tile to the tiles of present markers
-                var newStorageString = window.localStorage.getItem( presentTiles[j].markerName )
-                newStorageString += "," + toAdd
-                window.localStorage.setItem( presentTiles[j].markerName, newStorageString )
-            }
-
-            if (!newMarker.myTiles.includes(presentTiles[j].myTiles[0])){
-                newMarker.addTile(presentTiles[j].myTiles[0]); // add present tiles to newly displayed tile
-                var newStorageString = window.localStorage.getItem( newMarker.markerName )
-                newStorageString += "," + presentTiles[j].myTiles[0]
-                window.localStorage.setItem( newMarker.markerName, newStorageString )
-            }
-        }
-
-    }
-
-    for (var i = 0; i < allMarkers.length; i++){
-
-        if (allMarkers[i].marker.isVisible() == true){
-            allMarkers[i].inPreviousFrame = true;
-        } else {
-            allMarkers[i].inPreviousFrame = false;
-        }
-    }
-
-    fill(105, 166, 219, 150);
-    noStroke();
-    rectMode(CENTER);
-    rect(90, 158, 140, 50);
-
-    fill(255);
-    textSize(14);
-    text("Time: " + h + ": " + m, 35, 153);
-
-    // increment resources by 5 every 30 min
-    if ((m === 0 || m === 30 || m === 39) && addResources === false){
-        addResources = true;
-        resources += 5;
-    } 
     
-    if (addResources === true && (m !== 39 && m !== 30 && m !== 0)){
-        console.log("inside second if statement");
-        addResources = false;
+    if (overallState == 0){
+        var c1 = color(24,169,153);
+        var c2 = color(24,169,153);
+        var c3 = color(24,169,153);
+        var cText = color(72,67,73)
+        var cHover = color(247,240,240)
+        stroke(cText)
+        
+        if (mouseX >= 50 && mouseX <= 250 && mouseY >=400 && mouseY <=450){
+            console.log('hit')
+            c1 = cHover;
+            if (mouseIsPressed){
+                overallState = 1
+            }
+        }
+        if (mouseX >= width-250 && mouseX <= width-50 && mouseY >=400 && mouseY <=450){
+            console.log('hit2')
+            c2 = cHover;
+            if (mouseIsPressed){
+                overallState = 2
+            }
+        }
+        
+        if (mouseX >= 50 && mouseX <= 150 && mouseY >=150 && mouseY <=200){
+            console.log('hit2')
+            c3 = cHover;
+        }
+        
+        //ADD
+        background(cText);
+        fill(c1)
+        rect(50,400,200,50,20);
+        fill(cText)
+        textAlign(CENTER);
+        text('ADD TO WORLD', 150, 430)
+        
+        //VIEW
+        fill(c2)
+        rect(width-250,400,200,50,20);
+        fill(cText)
+        textAlign(CENTER);
+        text('EDIT WORLD', width-150, 430)
+        
+        //MARKERS
+        fill(c3)
+        rect(50,150,100,50,20)
+        fill(cText)
+        textAlign(CENTER);
+        text('MARKERS', 100, 180)
+        
+        //CENTER
+        imageMode(CENTER)
+        image(img, width/2, height/2)
+        imageMode(CORNER)
     }
+    
+    if (overallState == 1){
+        textAlign(LEFT)
+        // erase the background
+      world.clearDrawingCanvas();
+      let h = hour();
+      let m = minute();
 
-    console.log(addResources);
+        // move jellies
+        for (let k = 0; k < actors.length; k++){
+            actors[k].move();
+        }
 
-    if (m < 10){
-        m = "0" + m; // adding a "0" in front of the minutes, if less than 10 min, format-wise
+        for (let j = 0; j < mountainActors.length; j++){
+            mountainActors[j].move();
+        }
+
+        for (let v = 0; v < tumbleActors.length; v++){
+            tumbleActors[v].move();
+        }
+
+        var newMarker = findNewMarker();
+
+        if (newMarker !== null){
+
+            var toAdd = newMarker.myTiles[0];
+            var presentTiles = findVisibleMarkers();
+
+            for (let j = 0; j < presentTiles.length; j++){
+
+                if (!presentTiles[j].myTiles.includes(toAdd)){
+                    presentTiles[j].addTile(toAdd); // adding newly entered tile to the tiles of present markers
+                    var newStorageString = window.localStorage.getItem( presentTiles[j].markerName )
+                    newStorageString += "," + toAdd
+                    window.localStorage.setItem( presentTiles[j].markerName, newStorageString )
+                }
+
+                if (!newMarker.myTiles.includes(presentTiles[j].myTiles[0])){
+                    newMarker.addTile(presentTiles[j].myTiles[0]); // add present tiles to newly displayed tile
+                    var newStorageString = window.localStorage.getItem( newMarker.markerName )
+                    newStorageString += "," + presentTiles[j].myTiles[0]
+                    window.localStorage.setItem( newMarker.markerName, newStorageString )
+                }
+            }
+
+        }
+
+        for (var i = 0; i < allMarkers.length; i++){
+
+            if (allMarkers[i].marker.isVisible() == true){
+                allMarkers[i].inPreviousFrame = true;
+            } else {
+                allMarkers[i].inPreviousFrame = false;
+            }
+        }
+
+        fill(105, 166, 219, 150);
+        noStroke();
+        rectMode(CENTER);
+        rect(90, 158, 140, 50);
+
+        fill(255);
+        textSize(14);
+        text("Time: " + h + ": " + m, 35, 153);
+
+        // increment resources by 5 every 30 min
+        if ((m === 0 || m === 30 || m === 39) && addResources === false){
+            addResources = true;
+            resources += 5;
+        } 
+
+        if (addResources === true && (m !== 39 && m !== 30 && m !== 0)){
+            console.log("inside second if statement");
+            addResources = false;
+        }
+
+        console.log(addResources);
+
+        if (m < 10){
+            m = "0" + m; // adding a "0" in front of the minutes, if less than 10 min, format-wise
+        }
+
+        fill(255);
+        textSize(14);
+        text("Resources: " + resources, 35, 175);
     }
-
-    fill(255);
-    textSize(14);
-    text("Resources: " + resources, 35, 175);
-
+  
 }
 
 class Mountain{
