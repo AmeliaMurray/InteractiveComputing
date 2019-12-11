@@ -139,13 +139,45 @@ function setup() {
 
 
 function draw() {
+    // resources
+    let h = hour();
+    let m = minute();
+    // increment resources by 5 every 30 min
+    if ((m === 0 || m === 30 || m === 39) && addResources === false){
+        addResources = true;
+        resources += 5;
+    } 
+
+    if (addResources === true && (m !== 39 && m !== 30 && m !== 0)){
+        console.log("inside second if statement");
+        addResources = false;
+    }
+
+    console.log(addResources);
+
+    if (m < 10){
+        m = "0" + m; // adding a "0" in front of the minutes, if less than 10 min, format-wise
+    }
+    
+     // move jellies
+        for (let k = 0; k < actors.length; k++){
+            actors[k].move();
+        }
+
+        for (let j = 0; j < mountainActors.length; j++){
+            mountainActors[j].move();
+        }
+
+        for (let v = 0; v < tumbleActors.length; v++){
+            tumbleActors[v].move();
+        }
     
     if (overallState == 0){
         var c1 = color(24,169,153);
         var c2 = color(24,169,153);
         var c3 = color(24,169,153);
-        var cText = color(72,67,73)
-        var cHover = color(247,240,240)
+        var cText = color(72,67,73);
+        var cHover = color(247,240,240);
         stroke(cText)
         
         if (mouseX >= 50 && mouseX <= 250 && mouseY >=400 && mouseY <=450){
@@ -163,9 +195,12 @@ function draw() {
             }
         }
         
-        if (mouseX >= 50 && mouseX <= 150 && mouseY >=150 && mouseY <=200){
+        if (mouseX >= width-150 && mouseX <= width - 50 && mouseY >=150 && mouseY <=200){
             console.log('hit2')
             c3 = cHover;
+            if (mouseIsPressed){
+                window.location.href = "https://drive.google.com/drive/folders/15HX92Y23lS35LG5oAi30MXQd2EOiAPYL?usp=sharing";
+            }
         }
         
         //ADD
@@ -185,10 +220,10 @@ function draw() {
         
         //MARKERS
         fill(c3)
-        rect(50,150,100,50,20)
+        rect(width-150,150,100,50,20)
         fill(cText)
         textAlign(CENTER);
-        text('MARKERS', 100, 180)
+        text('MARKERS', width-100, 180)
         
         //CENTER
         imageMode(CENTER)
@@ -197,24 +232,10 @@ function draw() {
     }
     
     if (overallState == 1){
+        noStroke()
         textAlign(LEFT)
         // erase the background
       world.clearDrawingCanvas();
-      let h = hour();
-      let m = minute();
-
-        // move jellies
-        for (let k = 0; k < actors.length; k++){
-            actors[k].move();
-        }
-
-        for (let j = 0; j < mountainActors.length; j++){
-            mountainActors[j].move();
-        }
-
-        for (let v = 0; v < tumbleActors.length; v++){
-            tumbleActors[v].move();
-        }
 
         var newMarker = findNewMarker();
 
@@ -251,37 +272,122 @@ function draw() {
             }
         }
 
-        fill(105, 166, 219, 150);
+        fill(24, 169, 153, 150);
         noStroke();
         rectMode(CENTER);
-        rect(90, 158, 140, 50);
+        rect(90, 158, 140, 50, 20);
 
-        fill(255);
+        fill(72,67,73);
         textSize(14);
         text("Time: " + h + ": " + m, 35, 153);
 
-        // increment resources by 5 every 30 min
-        if ((m === 0 || m === 30 || m === 39) && addResources === false){
-            addResources = true;
-            resources += 5;
-        } 
-
-        if (addResources === true && (m !== 39 && m !== 30 && m !== 0)){
-            console.log("inside second if statement");
-            addResources = false;
-        }
-
-        console.log(addResources);
-
-        if (m < 10){
-            m = "0" + m; // adding a "0" in front of the minutes, if less than 10 min, format-wise
-        }
-
-        fill(255);
+        fill(72,67,73);
         textSize(14);
         text("Resources: " + resources, 35, 175);
+        
+        //BACK
+        var c1 = color(24,169,153, 150);
+        var cText = color(72,67,73);
+        var cHover = color(247,240,240);
+        
+        if (mouseX >= 20 && mouseX <= 70  && mouseY >=190 && mouseY <= 215){
+            console.log('hit')
+            c1 = cHover
+            if (mouseIsPressed){
+                overallState = 0
+            }
+        }
+        
+        fill(c1)
+        rectMode(CORNER)
+        rect(20,190,50,25,20);
+        fill(cText, 150)
+        textAlign(CENTER);
+        textSize(10)
+        text('BACK', 45, 205)
+        textSize(14)
     }
-  
+    
+    if (overallState == 2){
+        noStroke()
+        world.clearDrawingCanvas();
+        
+        fill(24, 169, 153, 150);
+        noStroke();
+        rectMode(CENTER);
+        rect(90, 158, 140, 50, 20);
+        
+        textAlign(LEFT)
+        fill(72,67,73);
+        textSize(14);
+        text("Time: " + h + ": " + m, 35, 153);
+
+        fill(72,67,73);
+        textSize(14);
+        text("Resources: " + resources, 35, 175);
+        textAlign(RIGHT);
+        
+        //BACK
+        var c1 = color(24,169,153, 150);
+        var c2 = color(24,169,153,150);
+        var c3 = color(24,169,153,150);
+        var cText = color(72,67,73);
+        var cHover = color(247,240,240);
+        
+        if (mouseX >= 20 && mouseX <= 70  && mouseY >=190 && mouseY <= 215){
+            c1 = cHover
+            if (mouseIsPressed){
+                overallState = 0
+            }
+        }
+       
+        if (mouseX >= 20 && mouseX <= 120  && mouseY >=250 && mouseY <= 275){
+            c2 = cHover
+            if (mouseIsPressed ){
+                console.log('PRESSED FLORA')
+            }
+        }
+        
+        if (mouseX >= 20 && mouseX <= 120  && mouseY >=280 && mouseY <= 305){
+            c3 = cHover
+            if (mouseIsPressed){
+                console.log('PRESSED FAUNA')
+            }
+        }
+        
+        for (var i = 0; i < allMarkers.length; i++){
+            if (allMarkers[i].marker.isVisible()){
+                for (var j = 0; j < allMarkers.length; j++){
+                    if (allMarkers[i] != allMarkers[j] && allMarkers[j].marker.isVisible()){
+                        textSize(20);
+                        stroke(0)
+                        fill(255, 105, 97)
+                        textAlign(CENTER)
+                        text('PLEASE REMOVE ONE MARKER FROM FRAME', width/2, height/2);
+                        textAlign(LEFT)
+                        textSize(14)
+                        noStroke()
+                    }
+                }
+            }
+        }
+        
+        fill(c1)
+        rectMode(CORNER)
+        rect(20,190,50,25,20);
+        fill(c2)
+        rect(20,250,100,25,20);
+        fill(c3)
+        rect(20,280,100,25,20);
+        fill(cText, 150)
+        textAlign(CENTER);
+        textSize(10)
+        text('BACK', 45, 205)
+        text('Add Flora', 65, 265);
+        text('Add Fauna', 65, 295);
+        textSize(14)
+    }
+    
 }
 
 class Mountain{
