@@ -9,11 +9,19 @@ var actors = [];
 var mountainActors = [];
 var tumbleActors = [];
 var bear;
-var littleCube1;
 var resources = 10; // starting number of resources
 var addResources = false;
 var overallState = 0;
 var img
+var mountainFlora = []
+var mountainFauna = []
+var rainforestFlora = []
+var rainforestFauna = []
+var desertFlora = []
+var desertFauna = []
+var waterFlora = []
+var waterFauna = []
+
 
 
 // 2D array of tile positions
@@ -170,6 +178,12 @@ function draw() {
 
         for (let v = 0; v < tumbleActors.length; v++){
             tumbleActors[v].move();
+        }
+        for (let m = 0; m < mountainFlora.length; m++){
+            mountainFlora[m].visible = true;
+        }
+        for (let r = 0; m < rainforestFlora.length; r++){
+            rainforestFlora[r].visible = true;
         }
     
     if (overallState == 0){
@@ -404,10 +418,22 @@ class Mountain{
         }));
 
         this.container.addChild(new MountainLandscape());
-        this.container.addChild(new Pinetree(-0.75, 0.6, -0.75));
-        this.container.addChild(new Pinetree(0.3, 0.6, -.8));
-        this.container.addChild(new Pinetree(0.8, 0.6, -.5));
-        this.container.addChild(new Pinetree(-0.8, 0.6, .7));
+
+        this.pt1 = new Pinetree(-0.75, 0.6, -0.75);
+        this.pt2 = new Pinetree(0.3, 0.6, -.8);
+        this.pt3 = new Pinetree(0.8, 0.6, -.5);
+        this.pt4 = new Pinetree(-0.8, 0.6, .7);
+
+        mountainFlora.push(this.pt1)
+        mountainFlora.push(this.pt2)
+        mountainFlora.push(this.pt3)
+        mountainFlora.push(this.pt4)
+
+        this.container.addChild(this.pt1.pinetree);
+        this.container.addChild(this.pt2.pinetree);
+        this.container.addChild(this.pt3.pinetree);
+        this.container.addChild(this.pt4.pinetree);
+
         this.container.addChild(new Cloud(0, 1.5, -0.3));
         this.container.addChild(new Hawk(0, 1.5, 0.3, -20));
         this.container.addChild(new Hawk(0.7, 1, -0.3, 40));
@@ -416,8 +442,15 @@ class Mountain{
         mountainActors.push(this.myBear);
         this.container.addChild(this.myBear.bear);
 
+        // rainforest flora
+        this.venus8 = new Venus(0.8, 0.3, -0.2)
+        this.venus9 = new Venus(-0.2, 0.3, 0.8)
+        rainforestFlora.push(this.venus8)
+        rainforestFlora.push(this.venus9)
+        this.container.addChild(this.venus8.venus);
+        this.container.addChild(this.venus9.venus);
+
         return this.container;
-        
     }
 }
 
@@ -476,7 +509,6 @@ class Bear{
 class Pinetree{
 
     constructor(xCoord, yCoord, zCoord){
-
         this.pinetree = new OBJ({
             x:xCoord, y: yCoord, z: zCoord,
             asset:'pinetree_obj',
@@ -484,7 +516,7 @@ class Pinetree{
             scaleX: 0.25, scaleY: 0.25, scaleZ: 0.25,
             rotationY: 90
         });
-        return this.pinetree;
+        //return this.pinetree;
     }
 }
 
@@ -521,7 +553,6 @@ class Hawk{
 class Desert{
 
     constructor(x, y, z){
-
         this.container = new Container3D({x: x, y: y, z: z});
         console.log("Desert: ", x, y, z)
 
@@ -539,28 +570,62 @@ class Desert{
             this.container.addChild(this.tumbleweed.tumble);
         }
 
-        this.container.addChild(new Cacti());
+
         this.container.addChild(new DesertSurface());
+        this.container.addChild(new Camel(0.3, 0.3, 0.2))
+        
+        // desert flora 
+        this.cacti1 = new Cacti(-.35, 0.5, .4)
+        desertFlora.push(this.cacti1)
+        this.container.addChild(this.cacti1.cacti);
+
+        // rainforest flora
+        this.venus6 = new Venus(-0.8, 0.3, 0)
+        this.venus7 = new Venus(0.5, 0.3, -0.4)
+        rainforestFlora.push(this.venus6)
+        rainforestFlora.push(this.venus7)
+        this.container.addChild(this.venus6.venus);
+        this.container.addChild(this.venus7.venus);
+
+        // mountain flora 
+        this.pt5 = new Pinetree(0.3, 0.7, 0.6)
+        this.pt6 = new Pinetree(-0.2, 0.7, -0.7)
+        mountainFlora.push(this.pt5)
+        mountainFlora.push(this.pt6)
+        this.container.addChild(this.pt5.pinetree);
+        this.container.addChild(this.pt6.pinetree);
 
         return this.container;
     }
 }
 
 class Cacti{
-
-    constructor(){
-
+    constructor(xCoord, yCoord, zCoord){
         this.cacti = new OBJ({
-            x:-.35, y: 0.5, z: .4,
+            x:xCoord, y: yCoord, z: zCoord,
             img: 'cactus',
             asset:'cactus_obj',
             mtl:'cactus_mtl',
             scaleX: 0.15, scaleY: 0.28, scaleZ: 0.15
         });
-
-        return this.cacti;
+        //return this.cacti;
     }
+}
 
+class Camel{
+
+    constructor(xCoord, yCoord, zCoord){
+
+        this.camel = new OBJ({
+            x:xCoord, y: yCoord, z: zCoord,
+            img: 'camel',
+            asset:'camel_obj',
+            mtl:'camel_mtl',
+            scaleX: .001, scaleY: .001, scaleZ: .001
+        });
+
+        return this.camel;
+    }
 }
 
 class Tumbleweed{
@@ -638,34 +703,37 @@ class Water{
             x:0.18, y:0.3, z:0,
             asset:'island_obj',
             mtl:'island_mtl',
-            scaleX: 0.01, scaleY: 0.01, scaleZ: 0.01
+            scaleX: 0.015, scaleY: 0.015, scaleZ: 0.015
         }))
         
-        // this.container.addChild(new Box({
-        //     x:0, y:-0.1, z:0,
-        //     red: 66, green: 144, blue: 245,
-        //     height: 2, width:2, depth: 0.2,
-        //     rotationX:-90,
-        //     transparent: true,
-        //     opacity: 0.5,
-        // }))
-        // this.container.addChild(new Box({
-        //     x:0, y:-0.3, z:0,
-        //     red: 66, green: 84, blue: 245,
-        //     height: 2, width:2, depth: 0.2,
-        //     rotationX:-90,
-        //     transparent: true,
-        //     opacity: 0.5,
-        // }))
-
         this.myJelly = new Jellies();
         this.mySun = new Sun();
         actors.push(this.myJelly);
         this.container.addChild(this.myJelly.jelly);
         actors.push(this.mySun);
         this.container.addChild(this.mySun.sun)
-        return this.container;
 
+        // amelia's code 
+        this.container.addChild( new Walrus())
+        this.container.addChild( new PalmTree(-0.1, 0.6, -0.1))
+
+        // rainforest flora
+        this.venus4 = new Venus(0, 0.4, 0.6)
+        this.venus5 = new Venus(-0.2, 0.6, 0.1)
+        rainforestFlora.push(this.venus4)
+        rainforestFlora.push(this.venus5)
+        this.container.addChild(this.venus4.venus);
+        this.container.addChild(this.venus5.venus);
+
+        // mountain flora 
+        this.pt7 = new Pinetree(0.5, 0.7, 0.5)
+        this.pt8 = new Pinetree(-0.5, 0.7, -0.5)
+        mountainFlora.push(this.pt7)
+        mountainFlora.push(this.pt8)
+        this.container.addChild(this.pt7.pinetree);
+        this.container.addChild(this.pt8.pinetree);
+
+        return this.container;
     }
 }
 
@@ -718,6 +786,34 @@ class Sun{
     }
 }
 
+class Walrus{
+    
+    constructor(){
+        this.walrus = new OBJ({
+            x:0.75, y:0.4, z:0.1,
+            asset:'walrus_obj',
+            mtl: 'walrus_mtl',
+            scaleX: .0002, scaleY: .0002, scaleZ: .0002
+        })
+
+        return this.walrus
+    }   
+}
+
+class PalmTree{
+    
+    constructor(xCoord, yCoord, zCoord){
+        this.palmTree = new OBJ({
+            x:xCoord, y:yCoord, z:zCoord,
+            asset:'palm_tree_obj',
+            mtl: 'palm_tree_mtl',
+            scaleX: 1.5, scaleY: 1.5, scaleZ: 1.5
+        })
+
+        return this.palmTree
+    }  
+}
+
 class Rainforest{
 
     constructor(x, y, z){
@@ -735,7 +831,28 @@ class Rainforest{
 
         this.container.addChild(new Trees())
         this.container.addChild(new Parrots(0, 1.5, 0.3, -20));
-        this.container.addChild(new Rains(0.5, .5, -0.3, 40));
+        //this.container.addChild(new Rains(0.5, .5, -0.3, 40));
+        this.container.addChild(new Jaguar(0.7, .3, -.2))
+
+        // rainforest flora 
+        this.venus1 = new Venus(0.8, 0.3, -0.8)
+        this.venus2 = new Venus(-0.3, 0.3, 0)
+        this.venus3 = new Venus(0.5, 0.3, 0.5)
+        rainforestFlora.push(this.venus1)
+        rainforestFlora.push(this.venus2)
+        rainforestFlora.push(this.venus3)
+        this.container.addChild(this.venus1.venus);
+        this.container.addChild(this.venus2.venus);
+        this.container.addChild(this.venus3.venus);
+
+        // mountain flora 
+        this.pt9 = new Pinetree(0, 0.7, 0.9)
+        this.pt10 = new Pinetree(-0.5, 0.7, -0.5)
+        mountainFlora.push(this.pt9)
+        mountainFlora.push(this.pt10)
+        this.container.addChild(this.pt9.pinetree);
+        this.container.addChild(this.pt10.pinetree);
+
 
         return this.container;
     }
@@ -770,6 +887,38 @@ class Parrots{
         });
 
         return this.parrots;
+    }
+}
+
+class Jaguar{
+
+    constructor(xCoord, yCoord, zCoord){
+
+        this.jaguar = new OBJ({
+            x:xCoord, y: yCoord, z: zCoord,
+            img: 'jaguar',
+            asset:'jaguar_obj',
+            mtl:'jaguar_mtl',
+            scaleX: 0.04, scaleY: 0.04, scaleZ: 0.04
+        });
+
+        return this.jaguar;
+    }
+}
+
+class Venus{
+
+    constructor(xCoord, yCoord, zCoord){
+
+        this.venus = new OBJ({
+            x:xCoord, y: yCoord, z: zCoord,
+            img: 'venus',
+            asset:'venus_obj',
+            mtl:'venus_mtl',
+            scaleX: 0.05, scaleY: 0.05, scaleZ: 0.05
+        });
+
+        //return this.venus;
     }
 }
 
@@ -861,3 +1010,38 @@ function findVisibleMarkers(){
     return temp;
 
 }
+
+
+/*
+
+MOUNTAIN
+flora:
+- pinetree
+fauna: 
+- bear
+- hawk
+
+
+RAINFOREST:
+flora:
+- venus fly trap 
+fauna:
+- parrot 
+- jaguar
+
+
+DESERT:
+flora:
+- tumbleweed
+- cacti 
+fauna:
+- armadillo
+
+WATER:
+flora:
+- palm tree
+fauna:
+- jelly 
+- walrus
+
+*/
