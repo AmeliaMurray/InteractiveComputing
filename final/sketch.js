@@ -181,11 +181,11 @@ function draw() {
 
     
     if (overallState == 0){
-        var c1 = color(24,169,153);
-        var c2 = color(24,169,153);
-        var c3 = color(24,169,153);
-        var cText = color(255, 246, 222);
-        var cHover = color(14, 105, 95);
+        var c1 = color(81, 214, 188);
+        var c2 = color(81, 214, 188);
+        var c3 = color(81, 214, 188);
+        var cText = color(141, 190, 227);
+        var cHover = color(84, 184, 167);
         stroke(cText)
         
         if (mouseX >= 50 && mouseX <= 250 && mouseY >=400 && mouseY <=450){
@@ -214,22 +214,31 @@ function draw() {
         //ADD
         background(cText);
         fill(c1)
+        strokeWeight(1.5);
+        stroke(255, 255, 255);
         rect(50,400,200,50,20);
-        fill(cText)
+        noStroke();
+        fill(255)
         textAlign(CENTER);
         text('ADD TO WORLD', 150, 430)
         
         //VIEW
         fill(c2)
+        strokeWeight(1.5);
+        stroke(255, 255, 255);
         rect(width-250,400,200,50,20);
-        fill(cText)
+        noStroke();
+        fill(255)
         textAlign(CENTER);
         text('EDIT WORLD', width-150, 430)
         
         //MARKERS
         fill(c3)
+        strokeWeight(1.5);
+        stroke(255, 255, 255);
         rect(width-150,150,100,50,20)
-        fill(cText)
+        noStroke();
+        fill(255)
         textAlign(CENTER);
         text('MARKERS', width-100, 180)
         
@@ -280,16 +289,16 @@ function draw() {
             }
         }
 
-        fill(24, 169, 153, 150);
+        fill(117, 206, 224, 150);
         noStroke();
         rectMode(CENTER);
         rect(90, 158, 140, 50, 20);
 
-        fill(255, 246, 222);
-        textSize(14);
+        fill(255);
+        textSize(13);
         text("Time: " + h + ": " + m, 35, 153);
 
-        fill(255, 246, 222);
+        fill(255);
         textSize(14);
         text("Resources: " + resources, 35, 175);
         
@@ -306,10 +315,10 @@ function draw() {
             }
         }
         
-        fill(c1)
+        fill(117, 206, 224, 150)
         rectMode(CORNER)
         rect(20,190,50,25,20);
-        fill(cText, 150)
+        fill(255)
         textAlign(CENTER);
         textSize(10)
         text('BACK', 45, 205)
@@ -320,25 +329,25 @@ function draw() {
         noStroke()
         world.clearDrawingCanvas();
         
-        fill(24, 169, 153, 150);
+        fill(117, 206, 224, 150);
         noStroke();
         rectMode(CENTER);
         rect(90, 158, 140, 50, 20);
         
         textAlign(LEFT)
-        fill(255, 246, 222);
-        textSize(14);
+        fill(255);
+        textSize(13);
         text("Time: " + h + ": " + m, 35, 153);
 
-        fill(255, 246, 222);
+        fill(255);
         textSize(14);
         text("Resources: " + resources, 35, 175);
         textAlign(RIGHT);
         
         //BACK
-        var c1 = color(24,169,153, 150);
-        var c2 = color(24,169,153,150);
-        var c3 = color(24,169,153,150);
+        var c1 = color(169, 199, 245);
+        var c2 = color(169, 199, 245);
+        var c3 = color(169, 199, 245);
         var cText = color(255, 246, 222);
         var cHover = color(14, 105, 95);
         
@@ -374,14 +383,14 @@ function draw() {
             }
         }
         
-        fill(c1)
+        fill(117, 206, 224, 150)
         rectMode(CORNER)
         rect(20,190,50,25,20);
-        fill(c2)
+        fill(117, 206, 224, 150)
         rect(20,250,100,25,20);
-        fill(c3)
+        fill(117, 206, 224, 150)
         rect(20,280,100,25,20);
-        fill(cText, 150)
+        fill(255, 255, 255)
         textAlign(CENTER);
         textSize(10)
         text('BACK', 45, 205)
@@ -425,7 +434,7 @@ function mousePressed(){
         }
         if (allMarkers[3].marker.isVisible()){
             allMarkers[3].marker.children[int(random(0,allMarkers[3].marker.children.length))].addChild(new OBJ({
-                x:random(-1,1), y: 0, z: random(-1,1),
+                x:random(-1,1), y: .5, z: random(-1,1),
                 asset:'cactus_obj',
                 mtl:'cactus_mtl',
                 scaleX: 0.15, scaleY: 0.28, scaleZ: 0.15,
@@ -684,7 +693,7 @@ class Desert{
         }));
 
         // add 3 tumbleweeds
-        for (let i = 0; i < 3; i++){
+        for (let i = 0; i < 6; i++){
             this.tumbleweed = new Tumbleweed();
             tumbleActors.push(this.tumbleweed);
             this.container.addChild(this.tumbleweed.tumble);
@@ -704,7 +713,7 @@ class Desert{
         this.cacti3 = new Cacti(-0.2, 0.5, .7)
         this.container.addChild(this.cacti1.cacti);
         this.container.addChild(this.cacti2.cacti);
-        this.container.addChild(this.cacti3.cacti);
+        // this.container.addChild(this.cacti3.cacti);
 
         return this.container;
     }
@@ -745,7 +754,7 @@ class Tumbleweed{
     constructor(){
 
         this.tumble = new OBJ({
-            x: random(-.75, .75), y: 0.35, z: random(-.75, .75),
+            x: random(-1, 1), y: 0.35, z: random(-1, 1),
             asset:'tumble_obj',
             mtl:'tumble_mtl',
             scaleX: 0.16, scaleY: 0.16, scaleZ: 0.16
@@ -930,7 +939,7 @@ class Rainforest{
             this.container.addChild(this.rain.rains);
         }
 
-        for (let i = 0; i < 3; i++){
+        for (let i = 0; i < 1; i++){
             this.fly = new Parrot();
             tumbleActors.push(this.fly);
             this.container.addChild(this.fly.parrot);
@@ -944,9 +953,9 @@ class Rainforest{
         this.container.addChild(this.venus3.venus);
 
         // rainforest fauna
-        this.parrot1 = new Parrot(0, 1.5, 0.3, -20)
+        // this.parrot1 = new Parrot(0, 1.5, 0.3, -20)
+        // this.container.addChild(this.parrot1.parrot)
         this.jaguar1 = new Jaguar(0.7, .3, -.2)
-        this.container.addChild(this.parrot1.parrot)
         this.container.addChild(this.jaguar1.jaguar)
 
         return this.container;
@@ -1003,7 +1012,7 @@ class Parrot{
 
         this.parrot.spinX(1);
         this.parrot.spinY(.5);
-        
+
         //return this.parrots;
     }
 }
