@@ -28,6 +28,7 @@ function preload(){
     img = loadImage('assets/startLogo.png')
     bloomAudio = loadSound('assets/bloom.mp3');
 }
+
 function setup() {
     world = new World('ARScene');
     
@@ -153,7 +154,7 @@ function setup() {
 
     allMarkers = [markerMountain, markerWater, markerRF, markerDesert];
     
-    //bloomAudio.loop();
+    bloomAudio.loop();
 }
 
 
