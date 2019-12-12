@@ -213,7 +213,7 @@ function draw() {
         }
         
         //ADD
-        background(cText);
+        background(197, 237, 229);
         fill(c1)
         strokeWeight(1.5);
         stroke(255, 255, 255);
@@ -304,7 +304,7 @@ function draw() {
         text("Resources: " + resources, 35, 175);
         
         //BACK
-        var c1 = color(24,169,153, 150);
+        var c1 = color(117,206,224, 150);
         var cText = color(255, 246, 222);
         var cHover = color(14, 105, 95);
         
@@ -316,7 +316,7 @@ function draw() {
             }
         }
         
-        fill(117, 206, 224, 150)
+        fill(c1)
         rectMode(CORNER)
         rect(20,190,50,25,20);
         fill(255)
@@ -346,9 +346,9 @@ function draw() {
         textAlign(RIGHT);
         
         //BACK
-        var c1 = color(169, 199, 245);
-        var c2 = color(169, 199, 245);
-        var c3 = color(169, 199, 245);
+        var c1 = color(117, 206, 224, 150);
+        var c2 = color(117, 206, 224, 150);
+        var c3 = color(117, 206, 224, 150);
         var cText = color(255, 246, 222);
         var cHover = color(14, 105, 95);
         
@@ -384,12 +384,12 @@ function draw() {
             }
         }
         
-        fill(117, 206, 224, 150)
+        fill(c1)
         rectMode(CORNER)
         rect(20,190,50,25,20);
-        fill(117, 206, 224, 150)
+        fill(c2)
         rect(20,250,100,25,20);
-        fill(117, 206, 224, 150)
+        fill(c3)
         rect(20,280,100,25,20);
         fill(255, 255, 255)
         textAlign(CENTER);
