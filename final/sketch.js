@@ -161,19 +161,7 @@ function draw() {
     // resources
     let h = hour();
     let m = minute();
-    // increment resources by 5 every 30 min
-    /*if ((m === 0 || m === 30 || m === 39) && addResources === false){
-        addResources = true;
-        resources += 5;
-    } 
-
-    if (addResources === true && (m !== 39 && m !== 30 && m !== 0)){
-        console.log("inside second if statement");
-        addResources = false;
-    }*/
-
-    //console.log(addResources);
-
+    
     if (m < 10){
         m = "0" + m; // adding a "0" in front of the minutes, if less than 10 min, format-wise
     }
@@ -364,7 +352,6 @@ function draw() {
         if (mouseX >= 20 && mouseX <= 120  && mouseY >=250 && mouseY <= 275){
             c2 = cHover
         }
-        //int(random(0, allMarkers[0].myTiles.length
         
         if (mouseX >= 20 && mouseX <= 120  && mouseY >=280 && mouseY <= 305){
             c3 = cHover
@@ -523,71 +510,18 @@ class Mountain{
     
         // mountain fauna
         this.bear1 = new Bear(0.7, 0.25, 0.3);
-        //this.hawk1 = new Hawk(0, 1.5, 0.3, -20);
-        //mountainFauna.push(this.bear1);
-        //mountainFauna.push(this.hawk1);
         this.container.addChild(this.bear1.bear);
-        //this.container.addChild(this.hawk1.hawk);
 
         // mountain flora
         this.pt1 = new Pinetree(-0.75, 0.6, -0.75);
         this.pt2 = new Pinetree(0.3, 0.6, -.8);
         this.pt3 = new Pinetree(0.8, 0.6, -.5);
         this.pt4 = new Pinetree(-0.8, 0.6, .7);
-        //mountainFlora.push(this.pt1)
-        //mountainFlora.push(this.pt2)
-        //mountainFlora.push(this.pt3)
-        //mountainFlora.push(this.pt4)
+
         this.container.addChild(this.pt1.pinetree);
         this.container.addChild(this.pt2.pinetree);
         this.container.addChild(this.pt3.pinetree);
         this.container.addChild(this.pt4.pinetree);
-
-        // rainforest flora
-        //this.venus8 = new Venus(0.8, 0.3, -0.2)
-        //this.venus9 = new Venus(-0.2, 0.3, 0.8)
-        //rainforestFlora.push(this.venus8)
-        //rainforestFlora.push(this.venus9)
-        //this.container.addChild(this.venus8.venus);
-        //this.container.addChild(this.venus9.venus);
-
-        // rainforest fauna
-        //this.parrot3 = new Parrot(0, 1.5, 0.3, -20)
-        //this.jaguar3 = new Jaguar(0.7, .3, -.2)
-        //rainforestFauna.push(this.parrot3)
-        //rainforestFauna.push(this.jaguar3)
-        //this.container.addChild(this.parrot3.parrot)
-        //this.container.addChild(this.jaguar3.jaguar)
-
-        // desert flora
-        //this.cacti4 = new Cacti(-.8, 0.5, -.4)
-        //this.cacti5 = new Cacti(.7, 0.5, .6)
-        //desertFlora.push(this.cacti4)
-        //desertFlora.push(this.cacti5)
-        //this.container.addChild(this.cacti4.cacti);
-        //this.container.addChild(this.cacti5.cacti);
-
-        // desert fauna 
-        //this.camel1 = new Camel(0.3, 0.3, 0.2)
-        //desertFauna.push(this.camel1)
-        //this.container.addChild(this.camel1.camel)
-
-        // water flora
-        //this.palm8 = new PalmTree(-0.8, 0.5, 0.2)
-        //this.palm9 = new PalmTree(0, 0.5, -0.8)
-        //waterFlora.push(this.palm8)
-        //waterFlora.push(this.palm9)
-        //this.container.addChild(this.palm8.palmtree)
-        //this.container.addChild(this.palm9.palmtree)
-
-        // water fauna 
-        //this.jelly3 = new Jellies(0, 0.2, 0);
-        //this.walrus3 = new Walrus(0.75, 0.4, 0.1,)
-        //waterFauna.push(this.jelly3);
-        //waterFauna.push(this.walrus3)
-        //this.container.addChild(this.jelly3.jelly)
-        //this.container.addChild(this.walrus3.walrus)
-
 
         return this.container;
     }
@@ -623,7 +557,6 @@ class Bear{
         this.yOffset = 0;
         this.zOffset = random(1000);
 
-        // not sure if i need this line or not but phillip doesn't have it
         //return this.bear;
     }
 
@@ -655,6 +588,7 @@ class Pinetree{
             scaleX: 0.25, scaleY: 0.25, scaleZ: 0.25,
             rotationY: 90
         });
+
         //return this.pinetree;
     }
 }
@@ -729,6 +663,7 @@ class Hawk{
 
           this.hawk.spinX(1);
           this.hawk.spinY(.5);
+
           //return this.parrots;
       }
 }
@@ -767,60 +702,9 @@ class Desert{
         this.cacti1 = new Cacti(-.7, 0.5, -.4)
         this.cacti2 = new Cacti(.6, 0.5, .4)
         this.cacti3 = new Cacti(-0.2, 0.5, .7)
-        //desertFlora.push(this.cacti1)
-        //desertFlora.push(this.cacti2)
-        //desertFlora.push(this.cacti3)
         this.container.addChild(this.cacti1.cacti);
         this.container.addChild(this.cacti2.cacti);
         this.container.addChild(this.cacti3.cacti);
-
-        // rainforest flora
-        //this.venus6 = new Venus(-0.8, 0.3, 0)
-        //this.venus7 = new Venus(0.5, 0.3, -0.4)
-        //rainforestFlora.push(this.venus6)
-        //rainforestFlora.push(this.venus7)
-        //this.container.addChild(this.venus6.venus);
-        //this.container.addChild(this.venus7.venus);
-
-        // rainforest fauna
-        //this.parrot2 = new Parrot(0, 1.5, 0.3, -20)
-        //this.jaguar2 = new Jaguar(0.7, .3, -.2)
-        //rainforestFauna.push(this.parrot2)
-        //rainforestFauna.push(this.jaguar2)
-        //this.container.addChild(this.parrot2.parrot)
-        //this.container.addChild(this.jaguar2.jaguar)
-
-        // mountain flora 
-        //this.pt7 = new Pinetree(0.3, 0.7, 0.6)
-        //this.pt8 = new Pinetree(-0.2, 0.7, -0.7)
-        //mountainFlora.push(this.pt7)
-        //mountainFlora.push(this.pt8)
-        //this.container.addChild(this.pt7.pinetree);
-        //this.container.addChild(this.pt8.pinetree);
-
-        // mountain fauna 
-        //this.bear2 = new Bear(0.7, 0.25, 0.3);
-        //this.hawk2 = new Hawk(0, 1.5, 0.3, -20);
-        //mountainFauna.push(this.bear2);
-        //mountainFauna.push(this.hawk2);
-        //this.container.addChild(this.bear2.bear);
-        //this.container.addChild(this.hawk2.hawk);
-
-        // water flora
-        //this.palm4 = new PalmTree(0, 0.5, -0.3)
-        //this.palm5 = new PalmTree(0.6, 0.5, 0)
-        //waterFlora.push(this.palm4)
-        //waterFlora.push(this.palm5)
-        //this.container.addChild(this.palm4.palmtree)
-        //this.container.addChild(this.palm5.palmtree)
-
-        // water fauna 
-        //this.jelly2 = new Jellies(0, 0.2, 0);
-        //this.walrus2 = new Walrus(0.75, 0.4, 0.1,)
-        //waterFauna.push(this.jelly2);
-        //waterFauna.push(this.walrus2)
-        //this.container.addChild(this.jelly2.jelly)
-        //this.container.addChild(this.walrus2.walrus)
 
         return this.container;
     }
@@ -835,6 +719,7 @@ class Cacti{
             mtl:'cactus_mtl',
             scaleX: 0.15, scaleY: 0.28, scaleZ: 0.15
         });
+
         //return this.cacti;
     }
 }
@@ -940,72 +825,6 @@ class Water{
         this.container.addChild(this.myJelly.jelly);
         actors.push(this.mySun);
         this.container.addChild(this.mySun.sun)
-
-        
-
-        // rainforest flora
-        //this.venus4 = new Venus(0, 0.4, 0.6)
-        //this.venus5 = new Venus(-0.2, 0.6, 0.1)
-        //rainforestFlora.push(this.venus4)
-        //rainforestFlora.push(this.venus5)
-        //this.container.addChild(this.venus4.venus);
-        //this.container.addChild(this.venus5.venus);
-
-        // rainforest fauna
-        //this.parrot4 = new Parrot(0, 1.5, 0.3, -20)
-        //this.jaguar4 = new Jaguar(0.7, .3, -.2)
-        //rainforestFauna.push(this.parrot4)
-        //rainforestFauna.push(this.jaguar4)
-        //this.container.addChild(this.parrot4.parrot)
-        //this.container.addChild(this.jaguar4.jaguar)        
-
-        // mountain flora 
-        //this.pt7 = new Pinetree(0.5, 0.7, 0.5)
-        //this.pt8 = new Pinetree(-0.5, 0.7, -0.5)
-        //mountainFlora.push(this.pt7)
-        //mountainFlora.push(this.pt8)
-        //this.container.addChild(this.pt7.pinetree);
-        //this.container.addChild(this.pt8.pinetree);
-
-        // mountain fauna
-        //this.bear3 = new Bear(0.7, 0.25, 0.3);
-        //this.hawk3 = new Hawk(0, 1.5, 0.3, -20);
-        //mountainFauna.push(this.bear3);
-        //mountainFauna.push(this.hawk3);
-        //this.container.addChild(this.bear3.bear);
-        //this.container.addChild(this.hawk3.hawk);
-
-        // desert flora
-        //this.cacti6 = new Cacti(-.5, 0.5, .4)
-        //this.cacti7 = new Cacti(.4, 0.5, -.5)
-        //desertFlora.push(this.cacti6)
-        //desertFlora.push(this.cacti7)
-        //this.container.addChild(this.cacti6.cacti);
-        //this.container.addChild(this.cacti7.cacti);
-
-        // desert fauna 
-        //this.camel1 = new Camel(0.3, 0.3, 0.2)
-        //desertFauna.push(this.camel1)
-        //this.container.addChild(this.camel1.camel)
-
-        // water flora 
-        //this.palm1 = new PalmTree(0, 0.7, -0.3)
-        //this.palm2 = new PalmTree(0.6, 0.5, 0)
-        //this.palm3 = new PalmTree(-0.2, 0.5, 0.6)
-        //waterFlora.push(this.palm1)
-        //waterFlora.push(this.palm2)
-        //waterFlora.push(this.palm3)
-        //this.container.addChild(this.palm1.palmtree)
-        //this.container.addChild(this.palm2.palmtree)
-        //this.container.addChild(this.palm3.palmtree)
-
-        // water fauna 
-        //this.jelly1 = new Jellies(0, 0.2, 0);
-        //this.walrus1 = new Walrus(0.75, 0.4, 0.1,)
-        //waterFauna.push(this.jelly1);
-        //waterFauna.push(this.walrus1)
-        //this.container.addChild(this.jelly1.jelly)
-        //this.container.addChild(this.walrus1.walrus)
         
         return this.container;
     }
@@ -1120,9 +939,6 @@ class Rainforest{
         this.venus1 = new Venus(0.8, 0.3, -0.8)
         this.venus2 = new Venus(-0.3, 0.3, 0)
         this.venus3 = new Venus(0.5, 0.3, 0.5)
-        //rainforestFlora.push(this.venus1)
-        //rainforestFlora.push(this.venus2)
-        //rainforestFlora.push(this.venus3)
         this.container.addChild(this.venus1.venus);
         this.container.addChild(this.venus2.venus);
         this.container.addChild(this.venus3.venus);
@@ -1130,55 +946,8 @@ class Rainforest{
         // rainforest fauna
         this.parrot1 = new Parrot(0, 1.5, 0.3, -20)
         this.jaguar1 = new Jaguar(0.7, .3, -.2)
-        //rainforestFauna.push(this.parrot1)
-        //rainforestFauna.push(this.jaguar1)
         this.container.addChild(this.parrot1.parrot)
         this.container.addChild(this.jaguar1.jaguar)
-
-        // mountain flora 
-        //this.pt9 = new Pinetree(0, 0.7, 0.9)
-        //this.pt10 = new Pinetree(-0.5, 0.7, -0.5)
-        //mountainFlora.push(this.pt9)
-        //mountainFlora.push(this.pt10)
-        //this.container.addChild(this.pt9.pinetree);
-        //this.container.addChild(this.pt10.pinetree);
-
-        // mountain fauna 
-        //this.bear4 = new Bear(0.7, 0.25, 0.3);
-        //this.hawk4 = new Hawk(0, 1.5, 0.3, -20);
-        //mountainFauna.push(this.bear4);
-        //mountainFauna.push(this.hawk4);
-        //this.container.addChild(this.bear4.bear);
-        //this.container.addChild(this.hawk4.hawk);
-
-        // desert flora
-        //this.cacti8 = new Cacti(-.8, 0.5, .4)
-        //this.cacti9 = new Cacti(.7, 0.5, -.6)
-        //desertFlora.push(this.cacti8)
-        //desertFlora.push(this.cacti9)
-        //this.container.addChild(this.cacti8.cacti);
-        //this.container.addChild(this.cacti9.cacti);  
-
-        // desert fauna 
-        //this.camel1 = new Camel(0.3, 0.3, 0.2)
-        //desertFauna.push(this.camel1)
-        //this.container.addChild(this.camel1.camel) 
-        
-        // water flora
-        //this.palm4 = new PalmTree(0, 0.7, -0.3)
-        //this.palm5 = new PalmTree(0.6, 0.5, 0)
-        //waterFlora.push(this.palm4)
-        //waterFlora.push(this.palm5)
-        //this.container.addChild(this.palm4.palmtree)
-        //this.container.addChild(this.palm5.palmtree)
-
-        // water fauna 
-        //this.jelly4 = new Jellies(0, 0.2, 0);
-        //this.walrus4 = new Walrus(0.75, 0.4, 0.1,)
-        //waterFauna.push(this.jelly4);
-        //waterFauna.push(this.walrus4)
-        //this.container.addChild(this.jelly4.jelly)
-        //this.container.addChild(this.walrus4.walrus)       
 
         return this.container;
     }
@@ -1234,6 +1003,7 @@ class Parrot{
 
         this.parrot.spinX(1);
         this.parrot.spinY(.5);
+        
         //return this.parrots;
     }
 }
